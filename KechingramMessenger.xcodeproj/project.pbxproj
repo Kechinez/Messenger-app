@@ -10,6 +10,18 @@
 		3D3539F020DFA9FD0039A6B2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3539EF20DFA9FD0039A6B2 /* LoginViewController.swift */; };
 		3D3539F320DFBF8C0039A6B2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3539F220DFBF8C0039A6B2 /* LoginView.swift */; };
 		3D3539F620E154A20039A6B2 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D3539F520E154A20039A6B2 /* OpenSans-Regular.ttf */; };
+		3D3539F820E248B60039A6B2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3D3539F720E248B60039A6B2 /* GoogleService-Info.plist */; };
+		3D3539FB20E28F5A0039A6B2 /* LoginViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3539FA20E28F5A0039A6B2 /* LoginViewExtensions.swift */; };
+		3D353A0120E3A6760039A6B2 /* UserChatsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D353A0020E3A6760039A6B2 /* UserChatsController.swift */; };
+		3D353A0320E3DD660039A6B2 /* TableViewBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D353A0220E3DD660039A6B2 /* TableViewBackground.swift */; };
+		3D353A0620E3FBC60039A6B2 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D353A0520E3FBC60039A6B2 /* DatabaseManager.swift */; };
+		3D8A7CA020E52F4300EADDBC /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A7C9F20E52F4300EADDBC /* UserProfile.swift */; };
+		3D8A7CA320E54BED00EADDBC /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A7CA220E54BED00EADDBC /* ChatTableViewCell.swift */; };
+		3D8A7CA520E54CF900EADDBC /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D8A7CA420E54CF900EADDBC /* OpenSans-Bold.ttf */; };
+		3D8A7CAA20E6267500EADDBC /* CurrentChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A7CA920E6267500EADDBC /* CurrentChatController.swift */; };
+		3D8A7CAC20E66AB600EADDBC /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A7CAB20E66AB600EADDBC /* Message.swift */; };
+		3D8A7CAE20E7B4EC00EADDBC /* WrongChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A7CAD20E7B4EC00EADDBC /* WrongChat.swift */; };
+		3D8A7CB020E8FE5600EADDBC /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A7CAF20E8FE5600EADDBC /* Chat.swift */; };
 		3DD0A65820DF99E700D9D18E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD0A65720DF99E700D9D18E /* AppDelegate.swift */; };
 		3DD0A65D20DF99E700D9D18E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DD0A65B20DF99E700D9D18E /* Main.storyboard */; };
 		3DD0A65F20DF99E800D9D18E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DD0A65E20DF99E800D9D18E /* Assets.xcassets */; };
@@ -23,6 +35,18 @@
 		3D3539EF20DFA9FD0039A6B2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		3D3539F220DFBF8C0039A6B2 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		3D3539F520E154A20039A6B2 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		3D3539F720E248B60039A6B2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3D3539FA20E28F5A0039A6B2 /* LoginViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewExtensions.swift; sourceTree = "<group>"; };
+		3D353A0020E3A6760039A6B2 /* UserChatsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserChatsController.swift; sourceTree = "<group>"; };
+		3D353A0220E3DD660039A6B2 /* TableViewBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewBackground.swift; sourceTree = "<group>"; };
+		3D353A0520E3FBC60039A6B2 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		3D8A7C9F20E52F4300EADDBC /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		3D8A7CA220E54BED00EADDBC /* ChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
+		3D8A7CA420E54CF900EADDBC /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		3D8A7CA920E6267500EADDBC /* CurrentChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentChatController.swift; sourceTree = "<group>"; };
+		3D8A7CAB20E66AB600EADDBC /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		3D8A7CAD20E7B4EC00EADDBC /* WrongChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrongChat.swift; sourceTree = "<group>"; };
+		3D8A7CAF20E8FE5600EADDBC /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		3DD0A65420DF99E700D9D18E /* KechingramMessenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KechingramMessenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DD0A65720DF99E700D9D18E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3DD0A65C20DF99E700D9D18E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -65,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				3D3539F220DFBF8C0039A6B2 /* LoginView.swift */,
+				3D3539FA20E28F5A0039A6B2 /* LoginViewExtensions.swift */,
 			);
 			path = LoginView;
 			sourceTree = "<group>";
@@ -72,10 +97,73 @@
 		3D3539F420E154A20039A6B2 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				3D8A7CA420E54CF900EADDBC /* OpenSans-Bold.ttf */,
 				3D3539F520E154A20039A6B2 /* OpenSans-Regular.ttf */,
 			);
 			path = Fonts;
 			sourceTree = SOURCE_ROOT;
+		};
+		3D3539F920E278B30039A6B2 /* UserChats */ = {
+			isa = PBXGroup;
+			children = (
+				3D3539FF20E3A6310039A6B2 /* UserChatsModel */,
+				3D3539FE20E3A61F0039A6B2 /* UserChatsView */,
+				3D3539FD20E3A5FF0039A6B2 /* UserChatsController */,
+			);
+			path = UserChats;
+			sourceTree = "<group>";
+		};
+		3D3539FC20E3A5F10039A6B2 /* CurrentChat */ = {
+			isa = PBXGroup;
+			children = (
+				3D8A7CA620E6219200EADDBC /* CurrentChatController */,
+			);
+			path = CurrentChat;
+			sourceTree = "<group>";
+		};
+		3D3539FD20E3A5FF0039A6B2 /* UserChatsController */ = {
+			isa = PBXGroup;
+			children = (
+				3D353A0020E3A6760039A6B2 /* UserChatsController.swift */,
+			);
+			path = UserChatsController;
+			sourceTree = "<group>";
+		};
+		3D3539FE20E3A61F0039A6B2 /* UserChatsView */ = {
+			isa = PBXGroup;
+			children = (
+				3D353A0220E3DD660039A6B2 /* TableViewBackground.swift */,
+				3D8A7CA220E54BED00EADDBC /* ChatTableViewCell.swift */,
+			);
+			path = UserChatsView;
+			sourceTree = "<group>";
+		};
+		3D3539FF20E3A6310039A6B2 /* UserChatsModel */ = {
+			isa = PBXGroup;
+			children = (
+				3D8A7C9F20E52F4300EADDBC /* UserProfile.swift */,
+				3D8A7CAB20E66AB600EADDBC /* Message.swift */,
+				3D8A7CAD20E7B4EC00EADDBC /* WrongChat.swift */,
+				3D8A7CAF20E8FE5600EADDBC /* Chat.swift */,
+			);
+			path = UserChatsModel;
+			sourceTree = "<group>";
+		};
+		3D353A0420E3ED650039A6B2 /* NetworkManagers */ = {
+			isa = PBXGroup;
+			children = (
+				3D353A0520E3FBC60039A6B2 /* DatabaseManager.swift */,
+			);
+			path = NetworkManagers;
+			sourceTree = "<group>";
+		};
+		3D8A7CA620E6219200EADDBC /* CurrentChatController */ = {
+			isa = PBXGroup;
+			children = (
+				3D8A7CA920E6267500EADDBC /* CurrentChatController.swift */,
+			);
+			path = CurrentChatController;
+			sourceTree = "<group>";
 		};
 		3DD0A64B20DF99E700D9D18E = {
 			isa = PBXGroup;
@@ -98,12 +186,16 @@
 		3DD0A65620DF99E700D9D18E /* KechingramMessenger */ = {
 			isa = PBXGroup;
 			children = (
+				3D353A0420E3ED650039A6B2 /* NetworkManagers */,
+				3D3539FC20E3A5F10039A6B2 /* CurrentChat */,
+				3D3539F920E278B30039A6B2 /* UserChats */,
 				3D3539ED20DFA9B40039A6B2 /* Login */,
 				3DD0A65720DF99E700D9D18E /* AppDelegate.swift */,
 				3DD0A65B20DF99E700D9D18E /* Main.storyboard */,
 				3DD0A65E20DF99E800D9D18E /* Assets.xcassets */,
 				3DD0A66020DF99E800D9D18E /* LaunchScreen.storyboard */,
 				3DD0A66320DF99E800D9D18E /* Info.plist */,
+				3D3539F720E248B60039A6B2 /* GoogleService-Info.plist */,
 				3D3539F420E154A20039A6B2 /* Fonts */,
 			);
 			path = KechingramMessenger;
@@ -189,6 +281,8 @@
 			files = (
 				3DD0A66220DF99E800D9D18E /* LaunchScreen.storyboard in Resources */,
 				3DD0A65F20DF99E800D9D18E /* Assets.xcassets in Resources */,
+				3D8A7CA520E54CF900EADDBC /* OpenSans-Bold.ttf in Resources */,
+				3D3539F820E248B60039A6B2 /* GoogleService-Info.plist in Resources */,
 				3D3539F620E154A20039A6B2 /* OpenSans-Regular.ttf in Resources */,
 				3DD0A65D20DF99E700D9D18E /* Main.storyboard in Resources */,
 			);
@@ -261,9 +355,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D8A7CB020E8FE5600EADDBC /* Chat.swift in Sources */,
+				3D353A0120E3A6760039A6B2 /* UserChatsController.swift in Sources */,
+				3D8A7CAE20E7B4EC00EADDBC /* WrongChat.swift in Sources */,
+				3D3539FB20E28F5A0039A6B2 /* LoginViewExtensions.swift in Sources */,
 				3D3539F320DFBF8C0039A6B2 /* LoginView.swift in Sources */,
+				3D8A7CAA20E6267500EADDBC /* CurrentChatController.swift in Sources */,
+				3D8A7CA320E54BED00EADDBC /* ChatTableViewCell.swift in Sources */,
+				3D353A0320E3DD660039A6B2 /* TableViewBackground.swift in Sources */,
+				3D8A7CAC20E66AB600EADDBC /* Message.swift in Sources */,
+				3D8A7CA020E52F4300EADDBC /* UserProfile.swift in Sources */,
 				3D3539F020DFA9FD0039A6B2 /* LoginViewController.swift in Sources */,
 				3DD0A65820DF99E700D9D18E /* AppDelegate.swift in Sources */,
+				3D353A0620E3FBC60039A6B2 /* DatabaseManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
