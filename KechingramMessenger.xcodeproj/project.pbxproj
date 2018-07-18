@@ -20,8 +20,8 @@
 		3D8A7CA520E54CF900EADDBC /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D8A7CA420E54CF900EADDBC /* OpenSans-Bold.ttf */; };
 		3D8A7CAA20E6267500EADDBC /* CurrentChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A7CA920E6267500EADDBC /* CurrentChatController.swift */; };
 		3D8A7CAC20E66AB600EADDBC /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A7CAB20E66AB600EADDBC /* Message.swift */; };
-		3D8A7CAE20E7B4EC00EADDBC /* WrongChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A7CAD20E7B4EC00EADDBC /* WrongChat.swift */; };
 		3D8A7CB020E8FE5600EADDBC /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A7CAF20E8FE5600EADDBC /* Chat.swift */; };
+		3DCD16C920FE417700A09CF8 /* ThreadSafeArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCD16C820FE417700A09CF8 /* ThreadSafeArray.swift */; };
 		3DD0A65820DF99E700D9D18E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD0A65720DF99E700D9D18E /* AppDelegate.swift */; };
 		3DD0A65D20DF99E700D9D18E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DD0A65B20DF99E700D9D18E /* Main.storyboard */; };
 		3DD0A65F20DF99E800D9D18E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DD0A65E20DF99E800D9D18E /* Assets.xcassets */; };
@@ -45,8 +45,8 @@
 		3D8A7CA420E54CF900EADDBC /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		3D8A7CA920E6267500EADDBC /* CurrentChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentChatController.swift; sourceTree = "<group>"; };
 		3D8A7CAB20E66AB600EADDBC /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		3D8A7CAD20E7B4EC00EADDBC /* WrongChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrongChat.swift; sourceTree = "<group>"; };
 		3D8A7CAF20E8FE5600EADDBC /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
+		3DCD16C820FE417700A09CF8 /* ThreadSafeArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadSafeArray.swift; sourceTree = "<group>"; };
 		3DD0A65420DF99E700D9D18E /* KechingramMessenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KechingramMessenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DD0A65720DF99E700D9D18E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3DD0A65C20DF99E700D9D18E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -143,8 +143,8 @@
 			children = (
 				3D8A7C9F20E52F4300EADDBC /* UserProfile.swift */,
 				3D8A7CAB20E66AB600EADDBC /* Message.swift */,
-				3D8A7CAD20E7B4EC00EADDBC /* WrongChat.swift */,
 				3D8A7CAF20E8FE5600EADDBC /* Chat.swift */,
+				3DCD16C820FE417700A09CF8 /* ThreadSafeArray.swift */,
 			);
 			path = UserChatsModel;
 			sourceTree = "<group>";
@@ -357,9 +357,9 @@
 			files = (
 				3D8A7CB020E8FE5600EADDBC /* Chat.swift in Sources */,
 				3D353A0120E3A6760039A6B2 /* UserChatsController.swift in Sources */,
-				3D8A7CAE20E7B4EC00EADDBC /* WrongChat.swift in Sources */,
 				3D3539FB20E28F5A0039A6B2 /* LoginViewExtensions.swift in Sources */,
 				3D3539F320DFBF8C0039A6B2 /* LoginView.swift in Sources */,
+				3DCD16C920FE417700A09CF8 /* ThreadSafeArray.swift in Sources */,
 				3D8A7CAA20E6267500EADDBC /* CurrentChatController.swift in Sources */,
 				3D8A7CA320E54BED00EADDBC /* ChatTableViewCell.swift in Sources */,
 				3D353A0320E3DD660039A6B2 /* TableViewBackground.swift in Sources */,

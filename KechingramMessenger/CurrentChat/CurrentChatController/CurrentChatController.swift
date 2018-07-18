@@ -12,7 +12,9 @@ import Firebase
 class CurrentChatController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     let cellId = "chatCell"
     var currentChat: Chat?
-    
+    let manager = FirebaseManager()
+    var messageList: [Message] = []
+    var lastMessageTimestamp: NSNumber?
     
     let inputTextField: UITextField = {
         let inputTextField = UITextField()
@@ -32,6 +34,12 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
         collectionView!.backgroundColor = .white
         setUpConstraints()
         
+        manager.getMessageHistoryOfChat(with: currentChat!.chatID) { (message) in
+            self.messageList.append(message)
+            print(message.text)
+            self.collectionView!.reloadData()
+        }
+        
         
     }
     
@@ -39,7 +47,7 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
     
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return self.messageList.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -56,35 +64,52 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
     
     
     @objc func sendMessage() {
-        let logedInUserRef = Auth.auth().currentUser!.uid
-        let ref = Database.database().reference().child("messages")
-        let childRef = ref.childByAutoId()
-        let timesamp =  NSNumber(value: Int(NSDate().timeIntervalSince1970))
-        let values: JSON = ["text": inputTextField.text!, "receiverID": currentChat!.receiver.userID, "senderID": currentChat!.senderID, "timestamp": timesamp]
-        //childRef.updateChildValues(values)
+        guard let currentUserID = Auth.auth().currentUser?.uid else { return }
+        let newMessagesRef = Database.database().reference().child("ChatsMessages").child(currentChat!.chatID).childByAutoId()
+        let messageTimestamp = NSNumber(value: Int(NSDate().timeIntervalSince1970))
+        let values: JSON = ["text": inputTextField.text!, "senderID": currentUserID, "receiverID": currentChat!.chatOpponentID!, "timestamp": messageTimestamp]
+        
+        newMessagesRef.setValue(values) { (error, ref) in
+            guard error == nil else { return }
+            let currentChatRef = Database.database().reference().child("chats").child(self.currentChat!.chatID)
+            let valuesToBeUpdated: JSON = ["timestampOfLastMessage": messageTimestamp, "lastMessageID": newMessagesRef.key]
+            currentChatRef.updateChildValues(valuesToBeUpdated)
+        }
+        
+    
         
         
         
         
-        childRef.updateChildValues(values) { (error, ref) in
-            guard error == nil  else {
-                print(error)
-                return
-            }
-            let userRef = Auth.auth().currentUser!.uid
-            let usersMessagesRef = Database.database().reference().child("sortedByUserMessages").child(userRef)
-            //let usersMessagesRef = Database.database().reference().child("usersMessages").child(logedInUserRef)
-            let messageID = childRef.key
-            usersMessagesRef.updateChildValues([messageID: 1])
-            
-            let receiverSortedByUserMessagesRef = Database.database().reference().child("sortedByUserMessages").child(self.currentChat!.receiver.userID)
-            receiverSortedByUserMessagesRef.updateChildValues([messageID: 1])
-            
+        //        let logedInUserRef = Auth.auth().currentUser!.uid
+//        let ref = Database.database().reference().child("messages")
+//        let childRef = ref.childByAutoId()
+//        let timesamp =  NSNumber(value: Int(NSDate().timeIntervalSince1970))
+//        //let values: JSON = ["text": inputTextField.text!, "receiverID": currentChat!.receiver.userID, "senderID": currentChat!.senderID, "timestamp": timesamp]
+//        //childRef.updateChildValues(values)
+//
+//
+//
+//
+//        childRef.updateChildValues(values) { (error, ref) in
+//            guard error == nil  else {
+//                print(error)
+//                return
+//            }
+//            let userRef = Auth.auth().currentUser!.uid
+//            let usersMessagesRef = Database.database().reference().child("sortedByUserMessages").child(userRef)
+//            //let usersMessagesRef = Database.database().reference().child("usersMessages").child(logedInUserRef)
+//            let messageID = childRef.key
+//            usersMessagesRef.updateChildValues([messageID: 1])
+//
+//            //let receiverSortedByUserMessagesRef = Database.database().reference().child("sortedByUserMessages").child(self.currentChat!.receiver.userID)
+//           // receiverSortedByUserMessagesRef.updateChildValues([messageID: 1])
+        
             
             
         }
         
-    }
+    
     
     
     func setUpConstraints() {

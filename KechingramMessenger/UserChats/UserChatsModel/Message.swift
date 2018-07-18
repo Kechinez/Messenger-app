@@ -40,4 +40,11 @@ class Message {
         }
     }
     
+    
+    func getCurrentUserChatOpponentID() -> String {
+        return (self.messageType == .Outgoing ? receiverID : senderID)
+    }
+    
+    
+    
 }

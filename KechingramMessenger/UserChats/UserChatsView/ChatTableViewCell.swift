@@ -66,7 +66,7 @@ class ChatTableViewCell: UITableViewCell {
 //    }
 
     
-     func setUpImageDrawings() {
+    private func setUpImageDrawings() {
         userImage.layer.cornerRadius = 29//44
         userImage.layer.masksToBounds = false
         userImage.clipsToBounds = true

@@ -29,20 +29,6 @@ class UserProfile {
             self.profileImageURL = profileImageURL
         }
         
-        
-//        guard let chats = jsonData["chats"] as? JSON else { return nil }
-//        var tempChatsArray: [Chat] = []
-//        for chat in chats.values {
-//            guard let castedChat = chat as? JSON else { continue }
-//            guard let chatID = castedChat["chatID"] as? String else { continue }
-//            guard let lastMessage = castedChat["lastMessage"] as? JSON else { continue }
-//            guard let lastMessageText = lastMessage["text"] as? String else { continue }
-//            guard let lastMessageTimestamp = lastMessage["timestamp"] as? NSNumber else { continue }
-//
-//            let retrievedChat = Chat(lastMessage: lastMessageText, timestamp: lastMessageTimestamp, chatID: chatID)
-//            tempChatsArray.append(retrievedChat)
-//        }
-        
         self.name = name
         self.email = email
         self.userID = dataSnapshot.key
