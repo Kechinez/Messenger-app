@@ -41,7 +41,7 @@ class Chat {
     func fillChatWithDataFrom(object: Any) {
        
         if let chatObject = object as? Chat {
-            self.lastMessageID = chatObject.lastMessageText!
+            self.lastMessageID = chatObject.lastMessageID
             self.timestamp = chatObject.timestamp
         
         } else if let userProfileObject = object as? UserProfile {

@@ -18,6 +18,25 @@ public typealias UpdatedValues = (updatedValue: String, updatedValueID: String)
 class FirebaseManager {
     
     
+    func searchForUser(with email: String, completionHandler: @escaping ((UserProfile?) -> ())) {
+        let searchRef = Database.database().reference().child("usersProfile").queryOrdered(byChild: "email").queryEqual(toValue: email)
+        searchRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            guard ((snapshot.value as? JSON) != nil) else {
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
+                return
+            }
+            guard let foundUserProfile = UserProfile(searchResultSnapshot: snapshot) else { return }
+            DispatchQueue.main.async {
+                completionHandler(foundUserProfile)
+            }
+            
+        }, withCancel: nil)
+    }
+    
+    
+    
     func observeUpdatesInChat(with chatID: String, completionHandler: @escaping ((Chat) -> ())) {
         let chatRef = Database.database().reference().child("chats").child(chatID)
         

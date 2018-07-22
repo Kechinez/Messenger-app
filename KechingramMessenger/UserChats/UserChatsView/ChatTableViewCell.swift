@@ -82,13 +82,11 @@ class ChatTableViewCell: UITableViewCell {
 
         nameLabel.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 7).isActive = true
         nameLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        //nameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
         nameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         
         timeLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
         timeLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 6).isActive = true
         timeLabel.bottomAnchor.constraint(equalTo: messageLabel.topAnchor, constant: -7).isActive = true
-        //timeLabel.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: <#T##CGFloat#>)
         timeLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
         messageLabel.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 7).isActive = true

@@ -11,7 +11,7 @@ import Firebase
 
 
 
-class UserChatsController: UITableViewController, UISearchResultsUpdating {
+class UserChatsController: UITableViewController, UITextFieldDelegate {
     let cellId = "chatCellId"
     var searchController: UISearchController?
     let nrgImage = UIImage(named: "image7.jpg")
@@ -19,8 +19,15 @@ class UserChatsController: UITableViewController, UISearchResultsUpdating {
     var isChatsControllerHiden = false
     var updatesDictionary = JSON()
     var userChats = ThreadSafeArray()
-    
-    
+    var isSearchEnabled = false
+    var searchResult: UserProfile?
+    var searchBar: SearchBar {
+        return self.tableView.tableHeaderView as! SearchBar
+    }
+    var userSearchInput: String {
+        guard let searchBar = self.tableView.tableHeaderView as? SearchBar else { return "" }
+        return searchBar.text
+    }
     
     
     
@@ -35,13 +42,9 @@ class UserChatsController: UITableViewController, UISearchResultsUpdating {
         self.checkIfUserIsLoggedIn()
         self.esteblishDatabaseConnection()
         
-        searchController = UISearchController(searchResultsController: nil)
-        searchController!.searchResultsUpdater = self
-        searchController!.dimsBackgroundDuringPresentation = false
-        searchController!.hidesNavigationBarDuringPresentation = false
-        tableView.tableHeaderView = searchController!.searchBar
-        searchController!.searchBar.tintColor = .customGreen()
-        searchController!.searchBar.barTintColor = .black
+        
+        
+        tableView.tableHeaderView = SearchBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 46), with: self)
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = .customGreen()
         tableView.backgroundView = TableViewBackground(frame: tableView.frame)
@@ -86,9 +89,69 @@ class UserChatsController: UITableViewController, UISearchResultsUpdating {
     
     
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let font = UIFont(name: "OpenSans", size: 13.0)
+        let attributes : [String : Any] = [NSAttributedStringKey.font.rawValue : font!,
+                                           NSAttributedStringKey.foregroundColor.rawValue : UIColor.customGreen()]
+        
+        textField.typingAttributes = attributes
+        return true
+    }
+    
+    
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        isSearchEnabled = true
+        self.tableView!.reloadData()
+        searchBar.animateSearchBegining()
+        
+        return true
+    }
+    
+    
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if userSearchInput != "" {
+            manager.searchForUser(with: userSearchInput) { (result) in
+                guard let userProfile = result else {
+                    print("NO RESULT!")
+                    return
+                }
+                self.searchResult = userProfile
+                self.resizeTableViewHeader()
+self.tableView.reloadData()
+                //                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+//
+//                })
+                
+            }
+        }
+        
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    
+    
+    
     
     
     //MARK: - additional methods
+    
+    
+    
+    private func resizeTableViewHeader() {
+        var newRect = self.tableView!.tableHeaderView!.frame
+        newRect.size.height = 76
+        let tblHeaderView = self.tableView!.tableHeaderView!
+        UIView.animate(withDuration: 0.5) {
+            tblHeaderView.frame = newRect
+            self.tableView.tableHeaderView = tblHeaderView
+        }
+        searchBar.animateSearchResultAppearing()
+        
+    }
+    
     
     private func esteblishDatabaseConnection() {
         manager.observeUserChats { (chatID) in
@@ -166,7 +229,11 @@ class UserChatsController: UITableViewController, UISearchResultsUpdating {
     
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.userChats.threadSafeChats.count
+        var numberOfRows = 0
+        if searchResult != nil {
+            numberOfRows = 1
+        }
+        return (isSearchEnabled ? numberOfRows : self.userChats.threadSafeChats.count)
     }
     
     
@@ -176,14 +243,22 @@ class UserChatsController: UITableViewController, UISearchResultsUpdating {
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatTableViewCell
-        let chatInCurrentCell = self.userChats.threadSafeChats[indexPath.row]
         
-        cell.messageLabel.text = chatInCurrentCell.lastMessageText
-        cell.nameLabel.text = chatInCurrentCell.chatOpponentName
-        cell.timeLabel.text = chatInCurrentCell.transformTimestampToStringDate()
-        cell.userImage.image = self.nrgImage!
+        if isSearchEnabled {
+            cell.nameLabel.text = searchResult!.name
+            cell.userImage.image = self.nrgImage!
+            cell.messageLabel.text = searchResult!.email
+            cell.timeLabel.text = ""
+        } else {
+            let chatInCurrentCell = self.userChats.threadSafeChats[indexPath.row]
+            cell.messageLabel.text = chatInCurrentCell.lastMessageText
+            cell.nameLabel.text = chatInCurrentCell.chatOpponentName
+            cell.timeLabel.text = chatInCurrentCell.transformTimestampToStringDate()
+            cell.userImage.image = self.nrgImage!
+        }
+        
+        
         
         return cell
     }
@@ -191,10 +266,20 @@ class UserChatsController: UITableViewController, UISearchResultsUpdating {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let navigationController = self.navigationController else { return }
+        let collectionViewLayout = UICollectionViewFlowLayout()
+        collectionViewLayout.scrollDirection = .vertical
+        collectionViewLayout.minimumLineSpacing = 10
         let chatController = CurrentChatController(collectionViewLayout: UICollectionViewFlowLayout())
         chatController.currentChat = self.userChats.threadSafeChats[indexPath.row]
         navigationController.pushViewController(chatController, animated: true)
     }
+    
+    
+    
+    
+    
+    
+    
     
     
 }
