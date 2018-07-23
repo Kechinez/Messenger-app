@@ -11,7 +11,7 @@ import Firebase
 
 
 
-class UserChatsController: UITableViewController, UITextFieldDelegate {
+class UserChatsController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     let cellId = "chatCellId"
     var searchController: UISearchController?
     let nrgImage = UIImage(named: "image7.jpg")
@@ -21,12 +21,18 @@ class UserChatsController: UITableViewController, UITextFieldDelegate {
     var userChats = ThreadSafeArray()
     var isSearchEnabled = false
     var searchResult: UserProfile?
-    var searchBar: SearchBar {
-        return self.tableView.tableHeaderView as! SearchBar
+    
+    unowned var chatsView: ChatsView {
+        return self.view as! ChatsView
     }
+    
+//    var searchBar: SearchBar {
+//        return self.chatsView.searchBar
+//    }
+    
     var userSearchInput: String {
-        guard let searchBar = self.tableView.tableHeaderView as? SearchBar else { return "" }
-        return searchBar.text
+        guard let text = self.chatsView.searchBar.searchTextField.text else { return "" }
+        return text
     }
     
     
@@ -35,20 +41,20 @@ class UserChatsController: UITableViewController, UITextFieldDelegate {
     
     //MARK: - viewController life cycle methods
     
+    override func loadView() {
+        self.view = ChatsView()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.register(ChatTableViewCell.self, forCellReuseIdentifier: cellId)
+        self.chatsView.chatsTableView.register(ChatTableViewCell.self, forCellReuseIdentifier: cellId)
         self.checkIfUserIsLoggedIn()
         self.esteblishDatabaseConnection()
         
-        
-        
-        tableView.tableHeaderView = SearchBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 46), with: self)
-        tableView.separatorStyle = .singleLine
-        tableView.separatorColor = .customGreen()
-        tableView.backgroundView = TableViewBackground(frame: tableView.frame)
-        
+        chatsView.chatsTableView.delegate = self
+        chatsView.chatsTableView.dataSource = self
+        chatsView.searchBar.searchTextField.delegate = self
         
         let logOutButton = UIBarButtonItem(image: UIImage(named: "logout.png"), style: .plain, target: self, action: #selector(logOut))
         self.navigationItem.leftBarButtonItem = logOutButton
@@ -79,7 +85,7 @@ class UserChatsController: UITableViewController, UITextFieldDelegate {
                 self.manager.getMessage(with: chatToBeUpdated.lastMessageID, inChatWith: chatToBeUpdated.chatID) { [chatToBeUpdated] (message) in
                     
                     chatToBeUpdated.lastMessageText = message.text
-                    self.tableView!.reloadData()
+                    self.chatsView.chatsTableView.reloadData()
                     
                 }
             }
@@ -102,8 +108,8 @@ class UserChatsController: UITableViewController, UITextFieldDelegate {
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         isSearchEnabled = true
-        self.tableView!.reloadData()
-        searchBar.animateSearchBegining()
+        self.chatsView.chatsTableView.reloadData()
+        chatsView.searchBar.animateSearchBegining()
         
         return true
     }
@@ -118,11 +124,8 @@ class UserChatsController: UITableViewController, UITextFieldDelegate {
                     return
                 }
                 self.searchResult = userProfile
-                self.resizeTableViewHeader()
-self.tableView.reloadData()
-                //                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-//
-//                })
+                self.chatsView.animateResultAppearing()
+                self.chatsView.chatsTableView.reloadData()
                 
             }
         }
@@ -140,17 +143,17 @@ self.tableView.reloadData()
     
     
     
-    private func resizeTableViewHeader() {
-        var newRect = self.tableView!.tableHeaderView!.frame
-        newRect.size.height = 76
-        let tblHeaderView = self.tableView!.tableHeaderView!
-        UIView.animate(withDuration: 0.5) {
-            tblHeaderView.frame = newRect
-            self.tableView.tableHeaderView = tblHeaderView
-        }
-        searchBar.animateSearchResultAppearing()
-        
-    }
+//    private func resizeTableViewHeader() {
+//        var newRect = self.tableView!.tableHeaderView!.frame
+//        newRect.size.height = 76
+//        let tblHeaderView = self.tableView!.tableHeaderView!
+//        UIView.animate(withDuration: 0.5) {
+//            tblHeaderView.frame = newRect
+//            self.tableView.tableHeaderView = tblHeaderView
+//        }
+//        searchBar.animateSearchResultAppearing()
+//
+//    }
     
     
     private func esteblishDatabaseConnection() {
@@ -166,7 +169,7 @@ self.tableView.reloadData()
                             guard let index = self.userChats.chatArrayStateDictionary[chat.chatID] else { return }
                             self.userChats.threadSafeChats[index].fillChatWithDataFrom(object: chatOpponentProfile)
                             self.userChats.threadSafeChats[index].fillChatWithDataFrom(object: message)
-                            self.tableView!.reloadData()
+                            self.chatsView.chatsTableView.reloadData()
                         })
                     })
                 } else {
@@ -180,7 +183,7 @@ self.tableView.reloadData()
                         self.userChats.threadSafeChats[index].fillChatWithDataFrom(object: chat)
                         self.manager.getMessage(with: chat.lastMessageID, inChatWith: chat.chatID, completionHandler: { (message) in
                             self.userChats.threadSafeChats[index].fillChatWithDataFrom(object: message)
-                            self.tableView!.reloadData()
+                            self.chatsView.chatsTableView.reloadData()
                         })
                     }
                 }
@@ -223,12 +226,12 @@ self.tableView.reloadData()
     
     // MARK: - Table view data source
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numberOfRows = 0
         if searchResult != nil {
             numberOfRows = 1
@@ -237,12 +240,12 @@ self.tableView.reloadData()
     }
     
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
     
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatTableViewCell
         
         if isSearchEnabled {
@@ -264,7 +267,7 @@ self.tableView.reloadData()
     }
     
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let navigationController = self.navigationController else { return }
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .vertical

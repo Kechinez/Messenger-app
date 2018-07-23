@@ -70,19 +70,18 @@ class SearchBar: UIView {
     
     
     
-    init(frame: CGRect, with viewController: UserChatsController) {
-        super.init(frame: frame)
+    init() {
+        super.init(frame: CGRect.zero)
         self.backgroundColor = #colorLiteral(red: 0.09279822335, green: 0.09279822335, blue: 0.09279822335, alpha: 1)
         self.addSubview(textLabel)
         self.addSubview(containerView)
         self.addSubview(backToChatsButton)
         containerView.addSubview(searchImage)
         containerView.addSubview(searchTextField)
-        
-        searchTextField.delegate = viewController
+
         setUpConstraints()
-        
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -115,10 +114,7 @@ class SearchBar: UIView {
         textLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         self.textLabelTopConstraint = textLabel.topAnchor.constraint(equalTo: containerView.topAnchor)
         self.textLabelTopConstraint!.isActive = true
-        //textLabel.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
-        //textLabel.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 10).isActive = true
         textLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 7).isActive = true
-        //textLabel.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
         textLabel.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -14).isActive = true
     }
     
