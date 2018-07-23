@@ -52,16 +52,17 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
         self.checkIfUserIsLoggedIn()
         self.esteblishDatabaseConnection()
         
+        chatsView.activateButtonsActionTargets(using: self)
         chatsView.chatsTableView.delegate = self
         chatsView.chatsTableView.dataSource = self
         chatsView.searchBar.searchTextField.delegate = self
         
-        let logOutButton = UIBarButtonItem(image: UIImage(named: "logout.png"), style: .plain, target: self, action: #selector(logOut))
-        self.navigationItem.leftBarButtonItem = logOutButton
-        
-        let settingsButton = UIBarButtonItem(image: UIImage(named: "settings.png"), style: .plain, target: self, action: #selector(presentSettingsViewController))
-        self.navigationItem.rightBarButtonItem = settingsButton
-        
+//        let logOutButton = UIBarButtonItem(image: UIImage(named: "logout.png"), style: .plain, target: self, action: #selector(logOut))
+//        self.navigationItem.leftBarButtonItem = logOutButton
+//
+//        let settingsButton = UIBarButtonItem(image: UIImage(named: "settings.png"), style: .plain, target: self, action: #selector(presentSettingsViewController))
+//        self.navigationItem.rightBarButtonItem = settingsButton
+//
     }
 
     
@@ -125,7 +126,10 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
                 }
                 self.searchResult = userProfile
                 self.chatsView.animateResultAppearing()
-                self.chatsView.chatsTableView.reloadData()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                    self.chatsView.chatsTableView.reloadData()
+                })
+                
                 
             }
         }
@@ -143,17 +147,22 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
     
     
     
-//    private func resizeTableViewHeader() {
-//        var newRect = self.tableView!.tableHeaderView!.frame
-//        newRect.size.height = 76
-//        let tblHeaderView = self.tableView!.tableHeaderView!
-//        UIView.animate(withDuration: 0.5) {
-//            tblHeaderView.frame = newRect
-//            self.tableView.tableHeaderView = tblHeaderView
-//        }
-//        searchBar.animateSearchResultAppearing()
-//
-//    }
+    @objc func backToChats() {
+        if searchResult == nil {
+            chatsView.searchBar.animateSearchStop()
+        } else {
+            chatsView.animateSearchResultCancel()
+        }
+        searchResult = nil
+        isSearchEnabled = false
+        chatsView.searchBar.searchTextField.text = ""
+        if chatsView.searchBar.searchTextField.isFirstResponder {
+            chatsView.searchBar.searchTextField.resignFirstResponder()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: {
+            self.chatsView.chatsTableView.reloadData()
+        })
+    }
     
     
     private func esteblishDatabaseConnection() {
@@ -239,10 +248,6 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
         return (isSearchEnabled ? numberOfRows : self.userChats.threadSafeChats.count)
     }
     
-    
-     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
-    }
     
     
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

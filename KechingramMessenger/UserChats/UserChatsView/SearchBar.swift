@@ -135,8 +135,33 @@ class SearchBar: UIView {
         
     }
     
+
+    func animateSearchStop() {
+        containerViewWidthConstraint!.isActive = false
+        containerViewWidthConstraint = containerView.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -14)
+        containerViewWidthConstraint!.isActive = true
+        
+        backToChatButtonTrailingConstraint!.isActive = false
+        backToChatButtonTrailingConstraint = backToChatsButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 40)
+        backToChatButtonTrailingConstraint!.isActive = true
+        
+        UIView.animate(withDuration: 0.5) {
+            self.layoutIfNeeded()
+        }
+    }
     
-    func animateSearchResultAppearing() {
+    
+    func animateTextLabelDisapperaing() {
+        textLabelTopConstraint!.isActive = false
+        textLabelTopConstraint = textLabel.topAnchor.constraint(equalTo: containerView.topAnchor)
+        textLabelTopConstraint!.isActive = true
+        UIView.animate(withDuration: 0.5) {
+            self.layoutIfNeeded()
+        }
+    }
+    
+    
+    func animateTextLabelAppearing() {
 
         
         textLabelTopConstraint!.isActive = false

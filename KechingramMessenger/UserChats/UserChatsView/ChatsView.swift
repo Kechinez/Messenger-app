@@ -13,6 +13,7 @@ class ChatsView: UIView {
         let tableView = UITableView()
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = .customGreen()
+        tableView.rowHeight = 70
         let background = UIView()
         background.backgroundColor = .black
         tableView.backgroundView = background
@@ -40,6 +41,16 @@ class ChatsView: UIView {
     }
     
     
+    func animateSearchResultCancel() {
+        searchBarHeightConstraint!.isActive = false
+        searchBarHeightConstraint = searchBar.heightAnchor.constraint(equalToConstant: 46)
+        searchBarHeightConstraint!.isActive = true
+        UIView.animate(withDuration: 0.5) {
+            self.layoutIfNeeded()
+        }
+        searchBar.animateTextLabelDisapperaing()
+    }
+    
     
     func animateResultAppearing() {
         searchBarHeightConstraint!.isActive = false
@@ -48,15 +59,23 @@ class ChatsView: UIView {
         UIView.animate(withDuration: 0.5) {
             self.layoutIfNeeded()
         }
+        searchBar.animateTextLabelAppearing()
     }
     
     
-    
+    func activateButtonsActionTargets(using viewController: UserChatsController) {
+        let logOutButton = UIBarButtonItem(image: UIImage(named: "logout.png"), style: .plain, target: viewController, action: #selector(UserChatsController.logOut))
+        viewController.navigationItem.leftBarButtonItem = logOutButton
+        
+        let settingsButton = UIBarButtonItem(image: UIImage(named: "settings.png"), style: .plain, target: viewController, action: #selector(UserChatsController.presentSettingsViewController))
+        viewController.navigationItem.rightBarButtonItem = settingsButton
+        
+        searchBar.backToChatsButton.addTarget(viewController, action: #selector(UserChatsController.backToChats), for: .touchUpInside)
+    }
     
     
     private func setUpConstraints() {
         
-        //searchBar.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         searchBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor).isActive = true
         searchBarHeightConstraint = searchBar.heightAnchor.constraint(equalToConstant: 46)
         searchBarHeightConstraint!.isActive = true
