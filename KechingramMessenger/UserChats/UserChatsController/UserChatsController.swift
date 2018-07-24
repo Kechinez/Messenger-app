@@ -57,18 +57,13 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
         chatsView.chatsTableView.dataSource = self
         chatsView.searchBar.searchTextField.delegate = self
         
-//        let logOutButton = UIBarButtonItem(image: UIImage(named: "logout.png"), style: .plain, target: self, action: #selector(logOut))
-//        self.navigationItem.leftBarButtonItem = logOutButton
-//
-//        let settingsButton = UIBarButtonItem(image: UIImage(named: "settings.png"), style: .plain, target: self, action: #selector(presentSettingsViewController))
-//        self.navigationItem.rightBarButtonItem = settingsButton
-//
     }
 
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.isChatsControllerHiden = true
+        self.updatesDictionary.removeAll()
         guard let navigaionController = self.navigationController else { return }
         navigaionController.isNavigationBarHidden = false
         
@@ -77,6 +72,14 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if isSearchEnabled {
+            chatsView.animateSearchResultCancel(animated: false)
+            isSearchEnabled = false
+            searchResult = nil
+            chatsView.searchBar.searchTextField.text = ""
+        }
+        
         self.isChatsControllerHiden = false
         
         if !self.updatesDictionary.isEmpty {
@@ -90,7 +93,12 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
                     
                 }
             }
+        } else {
+           self.chatsView.chatsTableView.reloadData()
         }
+        // обновалять таблицу даже если !self.updatesDictionary.isEmpty тру
+        
+        
     }
     
     
@@ -125,7 +133,7 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
                     return
                 }
                 self.searchResult = userProfile
-                self.chatsView.animateResultAppearing()
+                self.chatsView.animateSearchResultAppearing()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
                     self.chatsView.chatsTableView.reloadData()
                 })
@@ -149,9 +157,9 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
     
     @objc func backToChats() {
         if searchResult == nil {
-            chatsView.searchBar.animateSearchStop()
+            chatsView.searchBar.animateSearchStop(animated: true)
         } else {
-            chatsView.animateSearchResultCancel()
+            chatsView.animateSearchResultCancel(animated: true)
         }
         searchResult = nil
         isSearchEnabled = false
@@ -167,7 +175,9 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
     
     private func esteblishDatabaseConnection() {
         manager.observeUserChats { (chatID) in
+            print("User!!!!!!!")
             self.manager.observeUpdatesInChat(with: chatID, completionHandler: { (chat) in
+               
                 if self.userChats.isInitialLoadingOfChat(with: chat.chatID) {
                     self.userChats.append(chat: chat)
                     self.userChats.filterChatsArrayInDescendingOrder(updatingStateDictionary: true)
@@ -178,7 +188,11 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
                             guard let index = self.userChats.chatArrayStateDictionary[chat.chatID] else { return }
                             self.userChats.threadSafeChats[index].fillChatWithDataFrom(object: chatOpponentProfile)
                             self.userChats.threadSafeChats[index].fillChatWithDataFrom(object: message)
-                            self.chatsView.chatsTableView.reloadData()
+                            
+                            if !self.isSearchEnabled  || !self.isChatsControllerHiden {
+                                self.chatsView.chatsTableView.reloadData()
+                            }
+                            
                         })
                     })
                 } else {
@@ -278,7 +292,12 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
         collectionViewLayout.scrollDirection = .vertical
         collectionViewLayout.minimumLineSpacing = 10
         let chatController = CurrentChatController(collectionViewLayout: UICollectionViewFlowLayout())
-        chatController.currentChat = self.userChats.threadSafeChats[indexPath.row]
+        
+        if isSearchEnabled {
+            chatController.currentChat = Chat(partlyInitializingWith: searchResult!.name, chatOpponentID: searchResult!.userID)
+        } else {
+            chatController.currentChat = self.userChats.threadSafeChats[indexPath.row]
+        }
         navigationController.pushViewController(chatController, animated: true)
     }
     

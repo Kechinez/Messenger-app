@@ -41,18 +41,22 @@ class ChatsView: UIView {
     }
     
     
-    func animateSearchResultCancel() {
+    func animateSearchResultCancel(animated: Bool) {
         searchBarHeightConstraint!.isActive = false
         searchBarHeightConstraint = searchBar.heightAnchor.constraint(equalToConstant: 46)
         searchBarHeightConstraint!.isActive = true
-        UIView.animate(withDuration: 0.5) {
+        if animated {
+            UIView.animate(withDuration: 0.5) {
+                self.layoutIfNeeded()
+            }
+        } else {
             self.layoutIfNeeded()
         }
-        searchBar.animateTextLabelDisapperaing()
+        searchBar.animateTextLabelDisapperaing(animated: animated)
     }
     
     
-    func animateResultAppearing() {
+    func animateSearchResultAppearing() {
         searchBarHeightConstraint!.isActive = false
         searchBarHeightConstraint = searchBar.heightAnchor.constraint(equalToConstant: 76)
         searchBarHeightConstraint!.isActive = true

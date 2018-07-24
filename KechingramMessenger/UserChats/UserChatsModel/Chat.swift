@@ -11,12 +11,20 @@ import Foundation
 class Chat {
     var lastMessageID: String
     var timestamp: Double
-    let chatID: String
+    var chatID: String
     var lastMessageText: String?
     var chatOpponentName: String?
     var chatOpponentID: String?
     
     
+    init(partlyInitializingWith chatOpponentName: String, chatOpponentID: String) {
+        self.lastMessageID = ""
+        self.timestamp = 0
+        self.chatID = ""
+        self.chatOpponentID = chatOpponentID
+        self.chatOpponentName = chatOpponentName
+        self.lastMessageText = ""
+    }
     
     init?(data: JSON) {
         guard let chatID = data["chatID"] as? String,

@@ -16,13 +16,8 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
     var messageList: [Message] = []
     var lastMessageTimestamp: NSNumber?
     
-//    let inputTextField: UITextField = {
-//        let inputTextField = UITextField()
-//        inputTextField.borderStyle = .roundedRect
-//        inputTextField.placeholder = "Enter message"
-//        inputTextField.translatesAutoresizingMaskIntoConstraints = false
-//        return inputTextField
-//    }()
+    
+
     
     var keyboardView: KeyboardView?
     
@@ -35,29 +30,35 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
         self.keyboardView = keyboardView
         
         collectionView!.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 60, right: 0)
-        
         collectionView!.register(MesssageBubbleCell.self, forCellWithReuseIdentifier: cellId)
-        
-        navigationItem.title = "Chat controller"
-        
+        //navigationItem.title = "Chat controller"
         collectionView!.backgroundColor = .black
-       // setUpConstraints()
         
+        guard currentChat!.lastMessageID != "" else { return }
+        observeMessages()
+        
+    }
+    
+    
+    private func observeMessages() {
+    
         manager.getMessageHistoryOfChat(with: currentChat!.chatID) { (message) in
             self.messageList.append(message)
             print(message.text)
             self.collectionView!.reloadData()
         }
-        
-        
     }
     
-    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.messageList.count
     }
+    
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MesssageBubbleCell
@@ -76,22 +77,83 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
     }
     
     
+    
+    private func updateChatEntries(with value: JSON, includingChatID: Bool) {
+        
+        guard !value.isEmpty else { return }
+        
+        
+        
+        var mutableValue = value
+        if includingChatID {
+            mutableValue["chatID"] = currentChat!.chatID
+        }
+        let currentChatRef = Database.database().reference().child("chats").child(self.currentChat!.chatID)
+        
+        currentChatRef.updateChildValues(mutableValue) { [unowned self] (error, ref) in
+            guard error == nil else { return }
+            if includingChatID {
+                
+                let chatOpponentChatsRef = Database.database().reference().child("usersChats").child(self.currentChat!.chatOpponentID!)
+                chatOpponentChatsRef.updateChildValues([self.currentChat!.chatID: NSNumber(value: 0)])
+                
+                guard let currentUserID = Auth.auth().currentUser?.uid else { return }
+                let currentUserChatsRef = Database.database().reference().child("usersChats").child(currentUserID)
+                currentUserChatsRef.updateChildValues([self.currentChat!.chatID: NSNumber(value: 0)])
+                
+                self.currentChat!.lastMessageID = "22323"
+                
+                self.observeMessages()
+            }
+        }
+    }
+    
+    
     @objc func sendMessage() {
+        
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
-        let newMessagesRef = Database.database().reference().child("ChatsMessages").child(currentChat!.chatID).childByAutoId()
         let messageTimestamp = NSNumber(value: Int(NSDate().timeIntervalSince1970))
         let values: JSON = ["text": keyboardView!.text, "senderID": currentUserID, "receiverID": currentChat!.chatOpponentID!, "timestamp": messageTimestamp]
         
-        newMessagesRef.setValue(values) { (error, ref) in
-            guard error == nil else { return }
-            let currentChatRef = Database.database().reference().child("chats").child(self.currentChat!.chatID)
-            let valuesToBeUpdated: JSON = ["timestampOfLastMessage": messageTimestamp, "lastMessageID": newMessagesRef.key]
-            currentChatRef.updateChildValues(valuesToBeUpdated)
+        var newMessageRef: DatabaseReference!
+       
+       /// в lazy проперти происходит какая-то хуйня
+        if currentChat!.lastMessageID == "" {
+            newMessageRef = Database.database().reference().child("ChatsMessages").childByAutoId()
+            currentChat!.chatID = newMessageRef.key
+        } else {
+            newMessageRef = Database.database().reference().child("ChatsMessages").child(currentChat!.chatID)
         }
+ 
         
-    
+        
+        newMessageRef = newMessageRef.childByAutoId()
+        
+        let valuesToBeUpdated: JSON = ["timestampOfLastMessage": messageTimestamp, "lastMessageID": newMessageRef.key]
+        
+        newMessageRef.setValue(values) { [valuesToBeUpdated] (error, ref) in
+           
+            guard error == nil else { return }
+            
+            let chatIdRequiresUpdate = (self.currentChat!.lastMessageID == "" ? true : false)
+            self.updateChatEntries(with: valuesToBeUpdated, includingChatID: chatIdRequiresUpdate)
+        }
     }
     
+    
+//    private func addChatToChatParties() {
+//        let newChatRef = Database.database().reference().child("chats").childByAutoId()
+//        let ref = Database.database().reference()
+//        let newChatID = self.generetedChatID
+//        let chatOpponentChatsRef = Database.database().reference().child("usersChats").child(currentChat!.chatOpponentID!)
+//        chatOpponentChatsRef.updateChildValues([newChatID: NSNumber(value: 0)])
+//
+//        guard let currentUserID = Auth.auth().currentUser?.uid else { return }
+//        let currentUserChatsRef = Database.database().reference().child("usersChats").child(currentUserID)
+//        currentUserChatsRef.updateChildValues([newChatID: NSNumber(value: 0)])
+//
+//        observeMessages()
+//    }
     
     
     private func estimateRectForText(text: String) -> CGRect {

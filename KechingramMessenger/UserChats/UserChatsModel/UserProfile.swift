@@ -35,7 +35,7 @@ class UserProfile {
         
         self.name = name
         self.email = email
-        self.userID = searchResultSnapshot.key
+        self.userID = key
     }
     
     
