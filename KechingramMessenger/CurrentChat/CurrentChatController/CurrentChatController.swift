@@ -15,10 +15,7 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
     let manager = FirebaseManager()
     var messageList: [Message] = []
     var lastMessageTimestamp: NSNumber?
-    
-    
-
-    
+    var isInitialMessage = false
     var keyboardView: KeyboardView?
     
     
@@ -34,7 +31,10 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
         //navigationItem.title = "Chat controller"
         collectionView!.backgroundColor = .black
         
-        guard currentChat!.lastMessageID != "" else { return }
+        guard currentChat!.chatID != "" else {
+            isInitialMessage = true
+            return
+        }
         observeMessages()
         
     }
@@ -77,84 +77,22 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
     }
     
     
-    
-    private func updateChatEntries(with value: JSON, includingChatID: Bool) {
-        
-        guard !value.isEmpty else { return }
-        
-        
-        
-        var mutableValue = value
-        if includingChatID {
-            mutableValue["chatID"] = currentChat!.chatID
-        }
-        let currentChatRef = Database.database().reference().child("chats").child(self.currentChat!.chatID)
-        
-        currentChatRef.updateChildValues(mutableValue) { [unowned self] (error, ref) in
-            guard error == nil else { return }
-            if includingChatID {
-                
-                let chatOpponentChatsRef = Database.database().reference().child("usersChats").child(self.currentChat!.chatOpponentID!)
-                chatOpponentChatsRef.updateChildValues([self.currentChat!.chatID: NSNumber(value: 0)])
-                
-                guard let currentUserID = Auth.auth().currentUser?.uid else { return }
-                let currentUserChatsRef = Database.database().reference().child("usersChats").child(currentUserID)
-                currentUserChatsRef.updateChildValues([self.currentChat!.chatID: NSNumber(value: 0)])
-                
-                self.currentChat!.lastMessageID = "22323"
-                
-                self.observeMessages()
-            }
-        }
-    }
-    
-    
     @objc func sendMessage() {
         
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
         let messageTimestamp = NSNumber(value: Int(NSDate().timeIntervalSince1970))
-        let values: JSON = ["text": keyboardView!.text, "senderID": currentUserID, "receiverID": currentChat!.chatOpponentID!, "timestamp": messageTimestamp]
         
-        var newMessageRef: DatabaseReference!
-       
-       /// в lazy проперти происходит какая-то хуйня
-        if currentChat!.lastMessageID == "" {
-            newMessageRef = Database.database().reference().child("ChatsMessages").childByAutoId()
-            currentChat!.chatID = newMessageRef.key
-        } else {
-            newMessageRef = Database.database().reference().child("ChatsMessages").child(currentChat!.chatID)
-        }
- 
+        let tempMessageMetadata: JSON = ["text": keyboardView!.text, "senderID": currentUserID, "receiverID": currentChat!.chatOpponentID!, "timestamp": messageTimestamp, "isInitialMessage": NSNumber(value: isInitialMessage), "chatID": currentChat?.chatID as Any]
         
+        let messageMetadata = MessageMetadata(metadata: tempMessageMetadata)
         
-        newMessageRef = newMessageRef.childByAutoId()
-        
-        let valuesToBeUpdated: JSON = ["timestampOfLastMessage": messageTimestamp, "lastMessageID": newMessageRef.key]
-        
-        newMessageRef.setValue(values) { [valuesToBeUpdated] (error, ref) in
-           
-            guard error == nil else { return }
-            
-            let chatIdRequiresUpdate = (self.currentChat!.lastMessageID == "" ? true : false)
-            self.updateChatEntries(with: valuesToBeUpdated, includingChatID: chatIdRequiresUpdate)
+        manager.sendMessage(with: messageMetadata) { [weak self] (chatID) in
+            self?.isInitialMessage = false
+            self?.currentChat!.chatID = chatID
+            self?.observeMessages()
         }
     }
-    
-    
-//    private func addChatToChatParties() {
-//        let newChatRef = Database.database().reference().child("chats").childByAutoId()
-//        let ref = Database.database().reference()
-//        let newChatID = self.generetedChatID
-//        let chatOpponentChatsRef = Database.database().reference().child("usersChats").child(currentChat!.chatOpponentID!)
-//        chatOpponentChatsRef.updateChildValues([newChatID: NSNumber(value: 0)])
-//
-//        guard let currentUserID = Auth.auth().currentUser?.uid else { return }
-//        let currentUserChatsRef = Database.database().reference().child("usersChats").child(currentUserID)
-//        currentUserChatsRef.updateChildValues([newChatID: NSNumber(value: 0)])
-//
-//        observeMessages()
-//    }
-    
+
     
     private func estimateRectForText(text: String) -> CGRect {
         let baseRect = CGSize(width: (self.view!.frame.width - 100) * 0.7, height: 1000)
@@ -164,40 +102,5 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
         return NSString(string: text).boundingRect(with: baseRect, options: options, attributes: textAttributes, context: nil)
     }
     
-    
-    
-//    func setUpConstraints() {
-//        let containerView = UIView()
-//        containerView.backgroundColor = .red
-//        containerView.translatesAutoresizingMaskIntoConstraints = false
-//        view.addSubview(containerView)
-//        containerView.addSubview(inputTextField)
-//        containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-//        //containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-//        containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-//        containerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
-//        containerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-//
-//        let button = UIButton(type: .system)
-//        button.setTitle("Send", for: .normal)
-//        button.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        view.addSubview(button)
-//
-//        button.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
-//        button.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-//        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
-//        button.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
-//
-//
-//
-//        inputTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15).isActive = true
-//        inputTextField.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 7).isActive = true
-//        inputTextField.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -7).isActive = true
-//        inputTextField.trailingAnchor.constraint(equalTo: button.leadingAnchor, constant: -25).isActive = true
-//
-//
-//
-//    }
     
 }

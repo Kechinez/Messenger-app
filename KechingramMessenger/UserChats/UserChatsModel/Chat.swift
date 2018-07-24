@@ -15,6 +15,7 @@ class Chat {
     var lastMessageText: String?
     var chatOpponentName: String?
     var chatOpponentID: String?
+    var chatOpponentProfileImageUrl: String?
     
     
     init(partlyInitializingWith chatOpponentName: String, chatOpponentID: String) {
@@ -55,6 +56,8 @@ class Chat {
         } else if let userProfileObject = object as? UserProfile {
             self.chatOpponentName = userProfileObject.name
             self.chatOpponentID = userProfileObject.userID
+            guard let userProfileImageUrl = userProfileObject.profileImageURL else { return }
+            self.chatOpponentProfileImageUrl = userProfileImageUrl
         
         } else if let messageObject = object as? Message {
             self.lastMessageText = messageObject.text

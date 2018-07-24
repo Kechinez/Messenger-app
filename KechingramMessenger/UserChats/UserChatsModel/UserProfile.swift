@@ -20,16 +20,16 @@ class UserProfile {
     
 
     init?(searchResultSnapshot: Snapshot) {
-        guard let jsonData = searchResultSnapshot.value as? JSON else { return nil }
+        guard let firstIterationJsonData = searchResultSnapshot.value as? JSON else { return nil }
         var key = ""
-        for k in jsonData.keys {
+        for k in firstIterationJsonData.keys {
             key = k
         }
-        guard let d = jsonData[key] as? JSON else { return nil }
-        guard let name = d["name"] as? String,
-            let email = d["email"] as? String else { return nil }
+        guard let finalJsonData = firstIterationJsonData[key] as? JSON else { return nil }
+        guard let name = finalJsonData["name"] as? String,
+            let email = finalJsonData["email"] as? String else { return nil }
         
-        if let profileImageURL = d["profileImageURL"] as? String {
+        if let profileImageURL = finalJsonData["profileImageURL"] as? String {
             self.profileImageURL = profileImageURL
         }
         

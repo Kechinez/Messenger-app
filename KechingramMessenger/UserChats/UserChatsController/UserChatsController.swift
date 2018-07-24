@@ -9,12 +9,11 @@
 import UIKit
 import Firebase
 
-
+let imageCache = NSCache<NSString, AnyObject>()
 
 class UserChatsController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     let cellId = "chatCellId"
     var searchController: UISearchController?
-    let nrgImage = UIImage(named: "image7.jpg")
     let manager = FirebaseManager()
     var isChatsControllerHiden = false
     var updatesDictionary = JSON()
@@ -132,6 +131,14 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
                     print("NO RESULT!")
                     return
                 }
+                
+                if let userProfileImageUrl = userProfile.profileImageURL {
+                    self.manager.uploadProfileImage(with: userProfileImageUrl, completionHandler: { [ userProfileImageUrl] (data) in
+                        guard let image = UIImage(data: data) else { return }
+                        imageCache.setObject(image, forKey: NSString(string: userProfileImageUrl))
+                        self.chatsView.chatsTableView.reloadData()
+                    })
+                }
                 self.searchResult = userProfile
                 self.chatsView.animateSearchResultAppearing()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
@@ -188,6 +195,16 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
                             guard let index = self.userChats.chatArrayStateDictionary[chat.chatID] else { return }
                             self.userChats.threadSafeChats[index].fillChatWithDataFrom(object: chatOpponentProfile)
                             self.userChats.threadSafeChats[index].fillChatWithDataFrom(object: message)
+                            
+                            if let chatOpponentProfileImageUrl = chatOpponentProfile.profileImageURL {
+                                self.manager.uploadProfileImage(with: chatOpponentProfileImageUrl, completionHandler: { [chatOpponentProfileImageUrl] (data) in
+                                    guard let image = UIImage(data: data) else { return }
+                                    imageCache.setObject(image, forKey: NSString(string: chatOpponentProfileImageUrl))
+                                    if !self.isSearchEnabled  || !self.isChatsControllerHiden {
+                                        self.chatsView.chatsTableView.reloadData()
+                                    }
+                                })
+                            }
                             
                             if !self.isSearchEnabled  || !self.isChatsControllerHiden {
                                 self.chatsView.chatsTableView.reloadData()
@@ -269,7 +286,14 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
         
         if isSearchEnabled {
             cell.nameLabel.text = searchResult!.name
-            cell.userImage.image = self.nrgImage!
+            
+            if let profileImageUrl = searchResult!.profileImageURL {
+                if let image = imageCache.object(forKey: NSString(string: profileImageUrl)) as? UIImage {
+                   cell.userImage.image = image
+                }
+            }
+            
+            
             cell.messageLabel.text = searchResult!.email
             cell.timeLabel.text = ""
         } else {
@@ -277,7 +301,12 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
             cell.messageLabel.text = chatInCurrentCell.lastMessageText
             cell.nameLabel.text = chatInCurrentCell.chatOpponentName
             cell.timeLabel.text = chatInCurrentCell.transformTimestampToStringDate()
-            cell.userImage.image = self.nrgImage!
+            
+            if let profileImageUrl = chatInCurrentCell.chatOpponentProfileImageUrl {
+                if let image = imageCache.object(forKey: NSString(string: profileImageUrl)) as? UIImage {
+                    cell.userImage.image = image
+                }
+            }
         }
         
         
