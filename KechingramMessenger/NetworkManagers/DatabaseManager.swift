@@ -133,36 +133,30 @@ class FirebaseManager {
         let storageRef = Storage.storage().reference(forURL: url)
         storageRef.getData(maxSize: 4 * 1024 * 1024) { (data, error) in
             guard error == nil else { return }
-            
+            guard data != nil else { return }
+            completionHandler(data!)
         }
-        
-        
-        
-        //        func getPhotoFromStorage(using URLs: [URL], with completionHandler: @escaping (Photo) -> ()) {
-//            self.images.threadSafeImages = []
-//            DispatchQueue.global(qos: .utility).async(group: dispatchGroup) {
-//
-//                for url in URLs {
-//                    self.dispatchGroup.enter()
-//                    let gsReference = self.storage.reference(forURL: url.absoluteString)
-//                    gsReference.getData(maxSize: 6 * 1024 * 1024) { (data, error) in
-//                        if let problem = error {
-//                            print(problem.localizedDescription)
-//                            return
-//                        }
-//                        self.images.append(data: data!, with: self.dispatchGroup)
-//                    }
-//                }
-//
-//                self.dispatchGroup.notify(queue: DispatchQueue.main, execute: {
-//                    completionHandler(self.images)
-//                })
-//            }
-//        }
     }
     
     
-
+    func getCurrentUserProfile(completionHandler: @escaping ((UserProfile) -> ())) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else { return }
+        let currentUserProfileRef = Database.database().reference().child("usersProfile").child(currentUserID)
+        
+        currentUserProfileRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let profile = UserProfile(dataSnapshot: snapshot) else { return }
+            
+            DispatchQueue.main.async {
+                completionHandler(profile)
+            }
+            
+        }, withCancel: nil)
+        
+        
+    }
+    
+    
+    
     
     
     // MARK: - Methods to send messages and update chats metadata

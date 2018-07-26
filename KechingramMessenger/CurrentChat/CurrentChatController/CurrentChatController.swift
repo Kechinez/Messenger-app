@@ -26,10 +26,37 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
         let keyboardView = KeyboardView(with: self)
         self.keyboardView = keyboardView
         
+        if let chat = currentChat {
+            navigationItem.title =  chat.chatOpponentName!
+            if let imageURL = chat.chatOpponentProfileImageUrl {
+                if let image = imageCache.object(forKey: NSString(string: imageURL)) as? UIImage {
+                    let navBarHeight = self.navigationController!.navigationBar.frame.height
+                    let customView = UIView(frame: CGRect(x: 0, y: 0, width: navBarHeight, height: navBarHeight))
+                    customView.backgroundColor = .black
+                    let imageView = UIImageView(frame: CGRect(x: 0, y: 3, width: navBarHeight - 6, height: navBarHeight - 6))
+                    imageView.image = image
+                    imageView.layer.masksToBounds = false
+                    imageView.clipsToBounds = true
+                    imageView.layer.borderColor = UIColor.customGreen().cgColor
+                    imageView.layer.borderWidth = 1
+                    imageView.layer.cornerRadius = imageView.frame.height / 2
+                    customView.addSubview(imageView)
+                    let customNavItem = UIBarButtonItem(customView: customView)
+                    self.navigationItem.rightBarButtonItem = customNavItem
+                }
+            }
+        }
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification: )), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification: )), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
         collectionView!.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 60, right: 0)
         collectionView!.register(MesssageBubbleCell.self, forCellWithReuseIdentifier: cellId)
         //navigationItem.title = "Chat controller"
         collectionView!.backgroundColor = .black
+        collectionView!.keyboardDismissMode = .interactive
+        
         
         guard currentChat!.chatID != "" else {
             isInitialMessage = true
@@ -38,6 +65,47 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
         observeMessages()
         
     }
+    
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    
+    
+    // MARK: - keyboard notification methods
+    
+    @objc func keyboardWillShow(notification: Notification) {
+        guard let userInfo = notification.userInfo else { return }
+        let keyboardFrameHeight = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.height
+        let keyboardAnimationDuration = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
+        
+        self.keyboardView!.animateKeyboardWillShow(with: keyboardFrameHeight, animationDuration: keyboardAnimationDuration)
+        
+    }
+    
+    
+    @objc func keyboardWillHide(notification: Notification) {
+        guard let userInfo = notification.userInfo else { return }
+        let keyboardFrameHeight = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.height
+        let keyboardAnimationDuration = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
+       
+        self.keyboardView!.animateKeyboardWillHide(with: keyboardFrameHeight, animationDuration: keyboardAnimationDuration)
+    }
+    
+    
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let font = UIFont(name: "OpenSans", size: 15.0)
+        let attributes : [String : Any] = [NSAttributedStringKey.font.rawValue : font!,
+                                           NSAttributedStringKey.foregroundColor.rawValue : UIColor.customGreen()]
+        
+        textField.typingAttributes = attributes
+        return true
+        
+    }
+    
+    
     
     
     private func observeMessages() {
@@ -79,12 +147,15 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
     
     @objc func sendMessage() {
         
+        
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
         let messageTimestamp = NSNumber(value: Int(NSDate().timeIntervalSince1970))
         
         let tempMessageMetadata: JSON = ["text": keyboardView!.text, "senderID": currentUserID, "receiverID": currentChat!.chatOpponentID!, "timestamp": messageTimestamp, "isInitialMessage": NSNumber(value: isInitialMessage), "chatID": currentChat?.chatID as Any]
         
         let messageMetadata = MessageMetadata(metadata: tempMessageMetadata)
+        
+        keyboardView!.textField.text = ""
         
         manager.sendMessage(with: messageMetadata) { [weak self] (chatID) in
             self?.isInitialMessage = false
@@ -102,5 +173,10 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
         return NSString(string: text).boundingRect(with: baseRect, options: options, attributes: textAttributes, context: nil)
     }
     
-    
 }
+
+
+
+
+
+

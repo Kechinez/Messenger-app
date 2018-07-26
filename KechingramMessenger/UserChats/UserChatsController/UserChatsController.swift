@@ -13,21 +13,16 @@ let imageCache = NSCache<NSString, AnyObject>()
 
 class UserChatsController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     let cellId = "chatCellId"
-    var searchController: UISearchController?
     let manager = FirebaseManager()
     var isChatsControllerHiden = false
     var updatesDictionary = JSON()
     var userChats = ThreadSafeArray()
     var isSearchEnabled = false
     var searchResult: UserProfile?
-    
+    var currentUserProfile: UserProfile!
     unowned var chatsView: ChatsView {
         return self.view as! ChatsView
     }
-    
-//    var searchBar: SearchBar {
-//        return self.chatsView.searchBar
-//    }
     
     var userSearchInput: String {
         guard let text = self.chatsView.searchBar.searchTextField.text else { return "" }
@@ -49,12 +44,18 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
         super.viewDidLoad()
         self.chatsView.chatsTableView.register(ChatTableViewCell.self, forCellReuseIdentifier: cellId)
         self.checkIfUserIsLoggedIn()
-        self.esteblishDatabaseConnection()
+        self.setupChatsObservation()
         
         chatsView.activateButtonsActionTargets(using: self)
         chatsView.chatsTableView.delegate = self
         chatsView.chatsTableView.dataSource = self
         chatsView.searchBar.searchTextField.delegate = self
+        
+       
+        manager.getCurrentUserProfile { [unowned self] (userProfile) in
+            self.currentUserProfile = userProfile
+            self.navigationItem.title = userProfile.name
+        }
         
     }
 
@@ -99,6 +100,11 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
         
         
     }
+    
+    
+
+    
+    
     
     
     
@@ -180,7 +186,8 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     
-    private func esteblishDatabaseConnection() {
+    
+    private func setupChatsObservation() {
         manager.observeUserChats { (chatID) in
             print("User!!!!!!!")
             self.manager.observeUpdatesInChat(with: chatID, completionHandler: { (chat) in
@@ -283,6 +290,8 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
     
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatTableViewCell
+        cell.userImage.image = nil
+        
         
         if isSearchEnabled {
             cell.nameLabel.text = searchResult!.name

@@ -25,9 +25,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window?.rootViewController = UINavigationController(rootViewController: UserChatsController())
         
-        UINavigationBar.appearance().tintColor = .customGreen()
         UINavigationBar.appearance().barTintColor = .black
         
+        UINavigationBar.appearance().tintColor = UIColor.customGreen()
+        UINavigationBar.appearance().isTranslucent = false
+        if let navFont = UIFont(name: "OpenSans", size: 23) {
+            let navBarAttributesDictionary: [NSAttributedStringKey: Any] = [
+                NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): UIColor.customGreen(),
+                NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): navFont]
+            UINavigationBar.appearance().titleTextAttributes = navBarAttributesDictionary
+        }
         
         return true
     }

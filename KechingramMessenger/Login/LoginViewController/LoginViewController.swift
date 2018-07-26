@@ -44,15 +44,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        ref = Database.database().reference(withPath: "users")
-//        Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
-//            if user != nil {
-//                //self?.setViewController()
-//            }
-//        }
-        
-        loginView.setUpButtonsActionMethod(using: self)
+        ref = Database.database().reference(withPath: "usersProfile")
 
+        loginView.setUpButtonsActionMethod(using: self)
         loginView.setUpTextFiedlsDelegate(using: self)
         
     }
@@ -190,6 +184,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         default: break
         }
     }
+    
     
     
     @objc func segmentedControlIsChanged(sender: UISegmentedControl) {

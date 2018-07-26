@@ -9,18 +9,21 @@
 import UIKit
 
 class KeyboardView: UIView {
-    private let textField: UITextField = {
+    let textField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
+        let font = UIFont(name: "OpenSans", size: 13.0)!
+        let attributes: [NSAttributedStringKey : Any] = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): UIColor.customGreen(), NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): font]
+        let placeHolderString = NSAttributedString(string: "Message...", attributes: attributes)
+        textField.attributedPlaceholder = placeHolderString
         return textField
     }()
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = #colorLiteral(red: 0.1546042196, green: 0.1546042196, blue: 0.1546042196, alpha: 1)
+        view.backgroundColor = #colorLiteral(red: 0.1035850254, green: 0.1035850254, blue: 0.1035850254, alpha: 1)
         view.layer.cornerRadius = 14
         view.layer.borderColor = UIColor.customGreen().cgColor
         view.layer.borderWidth = 1.0
-        //view.backgroundColor = .black
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -44,13 +47,15 @@ class KeyboardView: UIView {
         return self.textField.text!
     }
     private let parentController: CurrentChatController
+     var keyboardBottomAnchor: NSLayoutConstraint?
+    
     
     
     init(with viewController: CurrentChatController) {
         self.parentController = viewController
         super.init(frame: CGRect.zero)
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = #colorLiteral(red: 0.08996272208, green: 0.08996272208, blue: 0.08996272208, alpha: 1)
+        self.backgroundColor = #colorLiteral(red: 0.07104616117, green: 0.07104616117, blue: 0.07104616117, alpha: 1)
         parentController.view.addSubview(self)
         self.addSubview(sendButton)
         self.addSubview(separatorView)
@@ -71,7 +76,8 @@ class KeyboardView: UIView {
     
     
     private func setUpConstraints() {
-        self.bottomAnchor.constraint(equalTo: parentController.view.bottomAnchor).isActive = true
+        self.keyboardBottomAnchor = self.bottomAnchor.constraint(equalTo: parentController.view.bottomAnchor)
+        self.keyboardBottomAnchor!.isActive = true
         self.heightAnchor.constraint(equalToConstant: 50).isActive = true
         self.widthAnchor.constraint(equalTo: parentController.view.widthAnchor).isActive = true
         self.leadingAnchor.constraint(equalTo: parentController.view.leadingAnchor).isActive = true
@@ -83,25 +89,44 @@ class KeyboardView: UIView {
         
         textField.heightAnchor.constraint(equalToConstant: 32).isActive = true
         textField.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 1).isActive = true
-        textField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 1).isActive = true
+        textField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 6).isActive = true
         textField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -1).isActive = true
         
         separatorView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         separatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
         separatorView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
 
-        sendButton.heightAnchor.constraint(equalToConstant: 28).isActive = true
-        sendButton.widthAnchor.constraint(equalToConstant: 28).isActive = true
+        sendButton.heightAnchor.constraint(equalToConstant: 34).isActive = true
+        sendButton.widthAnchor.constraint(equalToConstant: 34).isActive = true
         sendButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        sendButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
+        sendButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
         
         
         
     }
     
     
+    func animateKeyboardWillShow(with keyboardHeight: CGFloat, animationDuration: Double) {
+        self.keyboardBottomAnchor!.constant = -keyboardHeight
+        
+        UIView.animate(withDuration: animationDuration) {
+            if let superVeiew = self.superview {
+                superVeiew.layoutIfNeeded()
+            }
+        }
+    }
     
     
+    
+    func animateKeyboardWillHide(with keyboardHeight: CGFloat, animationDuration: Double) {
+        self.keyboardBottomAnchor!.constant = 0
+        
+        UIView.animate(withDuration: animationDuration) {
+            if let superVeiew = self.superview {
+                superVeiew.layoutIfNeeded()
+            }
+        }
+    }
     
 
 }

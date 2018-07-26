@@ -68,14 +68,24 @@ class ChatsView: UIView {
     
     
     func activateButtonsActionTargets(using viewController: UserChatsController) {
-        let logOutButton = UIBarButtonItem(image: UIImage(named: "logout.png"), style: .plain, target: viewController, action: #selector(UserChatsController.logOut))
-        viewController.navigationItem.leftBarButtonItem = logOutButton
+        if let image = UIImage(named: "logout.png") {
+            let coloredImage = image.tint(with: UIColor.customGreen())
+            coloredImage.withRenderingMode(.alwaysTemplate)
+            let logOutButton = UIBarButtonItem(image: coloredImage, style: .plain, target: viewController, action: #selector(UserChatsController.logOut))
+            viewController.navigationItem.leftBarButtonItem = logOutButton
+        }
         
-        let settingsButton = UIBarButtonItem(image: UIImage(named: "settings.png"), style: .plain, target: viewController, action: #selector(UserChatsController.presentSettingsViewController))
-        viewController.navigationItem.rightBarButtonItem = settingsButton
+        if let image = UIImage(named: "settings.png") {
+            let coloredImage = image.tint(with: UIColor.customGreen())
+            coloredImage.withRenderingMode(.alwaysTemplate)
+            let settingsButton = UIBarButtonItem(image: UIImage(named: "settings.png"), style: .plain, target: viewController, action: #selector(UserChatsController.presentSettingsViewController))
+            viewController.navigationItem.rightBarButtonItem = settingsButton
+        }
+        
         
         searchBar.backToChatsButton.addTarget(viewController, action: #selector(UserChatsController.backToChats), for: .touchUpInside)
     }
+    
     
     
     private func setUpConstraints() {
