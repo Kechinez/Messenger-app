@@ -14,3 +14,4 @@ Messenger-app is a prototype of a simple messenger application for iOS based on 
 * practice with network asynchronous callbacks
 * practice with Auto layout constraints
 * practice with CALayer
+* practice with parsing JSON
