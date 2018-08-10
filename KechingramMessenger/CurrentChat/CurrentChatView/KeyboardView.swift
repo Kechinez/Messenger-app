@@ -30,7 +30,7 @@ class KeyboardView: UIView {
     private let sendButton: UIButton = {
         let button = UIButton()
         let image = UIImage(named: "sendIcon.png")
-        let coloredImage = image!.tint(with: UIColor.customGreen())
+        let coloredImage = image!.tint(with: UIColor.customRed())
         coloredImage.withRenderingMode(.alwaysTemplate)
         button.setImage(coloredImage, for: .normal)
         button.tintColor = UIColor.customGreen()

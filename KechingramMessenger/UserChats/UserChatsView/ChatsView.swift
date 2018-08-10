@@ -69,16 +69,16 @@ class ChatsView: UIView {
     
     func activateButtonsActionTargets(using viewController: UserChatsController) {
         if let image = UIImage(named: "logout.png") {
-            let coloredImage = image.tint(with: UIColor.customGreen())
-            coloredImage.withRenderingMode(.alwaysTemplate)
-            let logOutButton = UIBarButtonItem(image: coloredImage, style: .plain, target: viewController, action: #selector(UserChatsController.logOut))
+            image.withRenderingMode(.alwaysTemplate)
+            let logOutButton = UIBarButtonItem(image: image, style: .plain, target: viewController, action: #selector(UserChatsController.logOut))
+            logOutButton.tintColor = UIColor.customRed()
             viewController.navigationItem.leftBarButtonItem = logOutButton
         }
         
         if let image = UIImage(named: "settings.png") {
-            let coloredImage = image.tint(with: UIColor.customGreen())
-            coloredImage.withRenderingMode(.alwaysTemplate)
-            let settingsButton = UIBarButtonItem(image: UIImage(named: "settings.png"), style: .plain, target: viewController, action: #selector(UserChatsController.presentSettingsViewController))
+            image.withRenderingMode(.alwaysTemplate)
+            let settingsButton = UIBarButtonItem(image: image, style: .plain, target: viewController, action: #selector(UserChatsController.changeUserSettings))
+            settingsButton.tintColor = UIColor.customRed()
             viewController.navigationItem.rightBarButtonItem = settingsButton
         }
         

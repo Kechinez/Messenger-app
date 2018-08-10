@@ -26,6 +26,8 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
         let keyboardView = KeyboardView(with: self)
         self.keyboardView = keyboardView
         
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Chats", style: .plain, target: self, action: #selector(self.backToUserChats))
+        
         if let chat = currentChat {
             navigationItem.title =  chat.chatOpponentName!
             if let imageURL = chat.chatOpponentProfileImageUrl {
@@ -69,6 +71,12 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
     
     override func viewDidDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    
+    @objc func backToUserChats() {
+        guard let navigationController = self.navigationController else { return }
+            navigationController.popViewController(animated: true)
     }
     
     

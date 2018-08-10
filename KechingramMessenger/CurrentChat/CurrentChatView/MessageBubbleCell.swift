@@ -12,8 +12,6 @@ class MesssageBubbleCell: UICollectionViewCell {
     
     let messageBubbleImage: UIImageView = {
         let image = UIImageView()
-        image.tintColor = UIColor.customGreen()
-        //image.backgroundColor = .black
         image.translatesAutoresizingMaskIntoConstraints = false
         
         return image
@@ -50,14 +48,13 @@ class MesssageBubbleCell: UICollectionViewCell {
             guard let image = UIImage(named: "bubble_received.png") else { return }
             
             self.messageBubbleImage.image = image
+            messageBubbleImage.tintColor = UIColor.customRed()
             setUpConstraintsForIncomingMessage()
             
         } else {
             guard let image = UIImage(named: "bubble_sent.png") else { return }
-            
             self.messageBubbleImage.image = image
-        
-            
+            messageBubbleImage.tintColor = UIColor.customGreen()
             setUpConstraintsForOutgoingMessage()
         }
         self.messageBubbleImage.image!.resizableImage(withCapInsets: UIEdgeInsetsMake(17, 25, 17, 25), resizingMode: .stretch)

@@ -42,6 +42,10 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Chats", style: .plain, target: nil, action: nil)
+        self.navigationItem.backBarButtonItem!.tintColor = UIColor.customRed()
+        
         self.chatsView.chatsTableView.register(ChatTableViewCell.self, forCellReuseIdentifier: cellId)
         self.checkIfUserIsLoggedIn()
         self.setupChatsObservation()
@@ -239,8 +243,12 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     
-    @objc func presentSettingsViewController() {
-        print(" temp Settings")
+    @objc func changeUserSettings() {
+        guard let userProfile = currentUserProfile else { return }
+        guard let navigationController = self.navigationController else { return }
+        let settingsController = SettingsController()
+        settingsController.currentUserProfile = userProfile
+        navigationController.pushViewController(settingsController, animated: true)
     }
     
     
@@ -290,6 +298,7 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
     
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatTableViewCell
+        
         cell.userImage.image = nil
         
         
