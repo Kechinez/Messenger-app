@@ -9,12 +9,9 @@
 import Foundation
 import Firebase
 
-public typealias JSON = [String: Any]
 public typealias Snapshot = DataSnapshot
-public typealias UpdatedValues = (updatedValue: String, updatedValueID: String)
 
 
-protocol JsonParsing {}
 
 class FirebaseManager: MessageSending, ChatMetadataInteracting, MessageObserving, ChatsObserving, UserSearching {}
 
@@ -124,14 +121,15 @@ extension ChatMetadataInteracting {
 
 
 extension MessageObserving {
+    
     func getMessage(with messageID: String, inChatWith chatID: String, completionHandler: @escaping ((Message) -> ())) {
         let messageRef = Database.database().reference().child("ChatsMessages").child(chatID).child(messageID)
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
         messageRef.observeSingleEvent(of: .value, with: { (snapshot) in
             
             guard let tempJsonData = snapshot.value as? JSON else { return }
-            let jsonData = JsonData(data: tempJsonData)
-            guard let message = jsonData.parsingJsonConstructingMessage(using: currentUserID) else { return }
+            //let jsonData = JsonData(data: tempJsonData)
+            guard let message = Message(data: <#T##JSON#>, currentUserID: <#T##String#>//jsonData.parsingJsonConstructingMessage(using: currentUserID) else { return }
             
             DispatchQueue.main.async {
                 completionHandler(message)
@@ -169,7 +167,7 @@ extension ChatsObserving {
         chatRef.observe(.value, with: { (snapshot) in
             guard let tempJsonData = snapshot.value as? JSON else { return }
             let jsonData = JsonData(data: tempJsonData)
-            guard let chat = jsonData.parsingJsonConstructingChat() else { return }
+            guard let chat = Chat(//jsonData.parsingJsonConstructingChat() else { return }
             DispatchQueue.main.async {
                 completionHandler(chat)
             }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Chat {
+class Chat: JsonParsing {
     var lastMessageID: String
     var timestamp: Double
     var chatID: String
@@ -16,6 +16,13 @@ class Chat {
     var chatOpponentName: String?
     var chatOpponentID: String?
     var chatOpponentProfileImageUrl: String?
+    
+    
+    init(lastMessageID: String, chatID: String, timestamp: Double) {
+        self.lastMessageID = lastMessageID
+        self.chatID = chatID
+        self.timestamp = timestamp
+    }
     
     
     init(partlyInitializingWith chatOpponentName: String, chatOpponentID: String) {
@@ -27,16 +34,6 @@ class Chat {
         self.lastMessageText = ""
     }
     
-    init?(data: JSON) {
-        guard let chatID = data["chatID"] as? String,
-            let lastMessage = data["lastMessageID"] as? String,
-            let lastMessageTimestamp = data["timestampOfLastMessage"] as? NSNumber else { return nil }
-        
-        self.lastMessageID = lastMessage
-        self.chatID = chatID
-        self.timestamp = lastMessageTimestamp.doubleValue 
-        
-    }
     
     
     func transformTimestampToStringDate() -> String {

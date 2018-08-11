@@ -13,7 +13,9 @@ public enum MessageType {
     case Outgoing
 }
 
-class Message {
+
+
+class Message: JsonParsing {
     
     let text: String
     let receiverID: String
@@ -22,23 +24,14 @@ class Message {
     let messageType: MessageType
     
     
-    init?(data: JSON, currentUserID: String) {
-        guard let text = data["text"] as? String,
-              let recieverID = data["receiverID"] as? String,
-              let senderID = data["senderID"] as? String,
-              let timestamp = data["timestamp"] as? NSNumber else { return nil }
-        
+    init(text: String, timestamp: NSNumber, senderID: String, receiverID: String, messageType: MessageType) {
         self.text = text
-        self.receiverID = recieverID
-        self.senderID = senderID
         self.timestamp = timestamp
-        
-        if currentUserID == senderID {
-            self.messageType = .Outgoing
-        } else {
-            self.messageType = .Incoming
-        }
+        self.senderID = senderID
+        self.receiverID = receiverID
+        self.messageType = messageType
     }
+    
     
     
     func getCurrentUserChatOpponentID() -> String {

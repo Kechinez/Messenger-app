@@ -10,48 +10,19 @@ import Foundation
 
 
 
-class UserProfile {
-    
+class UserProfile: JsonParsing {
     
     let name: String
     let email: String
     let userID: String
     var profileImageURL: String?
     
-
-    init?(searchResultSnapshot: Snapshot) {
-        guard let firstIterationJsonData = searchResultSnapshot.value as? JSON else { return nil }
-        var key = ""
-        for k in firstIterationJsonData.keys {
-            key = k
-        }
-        guard let finalJsonData = firstIterationJsonData[key] as? JSON else { return nil }
-        guard let name = finalJsonData["name"] as? String,
-            let email = finalJsonData["email"] as? String else { return nil }
-        
-        if let profileImageURL = finalJsonData["profileImageURL"] as? String {
-            self.profileImageURL = profileImageURL
-        }
-        
+    
+    init(name: String, email: String, userID: String, profileImageURL: String?) {
         self.name = name
         self.email = email
-        self.userID = key
+        self.userID = userID
+        guard let url = profileImageURL else { return }
+        self.profileImageURL = url
     }
-    
-    
-
-    init?(dataSnapshot: Snapshot) {
-        guard let jsonData = dataSnapshot.value as? JSON else { return nil }
-        guard let name = jsonData["name"] as? String,
-              let email = jsonData["email"] as? String else { return nil }
-        
-        if let profileImageURL = jsonData["profileImageURL"] as? String {
-            self.profileImageURL = profileImageURL
-        }
-        
-        self.name = name
-        self.email = email
-        self.userID = dataSnapshot.key
-    }
-    
 }
