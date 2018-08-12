@@ -15,7 +15,7 @@ public enum MessageType {
 
 
 
-class Message: JsonParsing {
+struct Message {
     
     let text: String
     let receiverID: String
@@ -24,13 +24,13 @@ class Message: JsonParsing {
     let messageType: MessageType
     
     
-    init(text: String, timestamp: NSNumber, senderID: String, receiverID: String, messageType: MessageType) {
-        self.text = text
-        self.timestamp = timestamp
-        self.senderID = senderID
-        self.receiverID = receiverID
-        self.messageType = messageType
-    }
+//    init(text: String, timestamp: NSNumber, senderID: String, receiverID: String, messageType: MessageType) {
+//        self.text = text
+//        self.timestamp = timestamp
+//        self.senderID = senderID
+//        self.receiverID = receiverID
+//        self.messageType = messageType
+//    }
     
     
     

@@ -43,12 +43,12 @@ struct MessageMetadata {
     }
     
     
-    func buildMessageJSON() -> JSON {
+    func messageJsonBuilding() -> JSON {
         return ["senderID": self.senderID, "receiverID": self.receiverID, "text": self.text, "timestamp": self.timestamp]
     }
     
     
-    func buildChatUpdates(requiredChatID: Bool) -> JSON {
+    func chatUpdatesBuilding(requiredChatID: Bool) -> JSON {
         if requiredChatID {
             return ["timestampOfLastMessage": self.timestamp, "lastMessageID": self.messageID!, "chatID": self.currentChatID!]
         } else {

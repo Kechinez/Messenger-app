@@ -10,12 +10,22 @@ import Foundation
 
 public typealias JSON = [String: Any]
 
-protocol JsonParsing {}
+
+
+protocol JsonParsingMessage {
+    init?(data: JSON, currentUserID: String)
+}
+protocol JsonParsingChat {
+    init?(data: JSON)
+}
+protocol JsonParsingUserProfile {
+    init?(searchResultSnapshot: Snapshot)
+    init?(dataSnapshot: Snapshot)
+}
 
 
 
-extension JsonParsing where Self == Message {
-    
+extension Message: JsonParsingMessage {
     init?(data: JSON, currentUserID: String) {
         guard let text = data["text"] as? String,
             let recieverID = data["receiverID"] as? String,
@@ -24,29 +34,34 @@ extension JsonParsing where Self == Message {
         
         let messageType = (currentUserID == senderID ? MessageType.Outgoing : MessageType.Incoming)
         
-        self.init(text: text, timestamp: timestamp, senderID: senderID, receiverID: recieverID, messageType: messageType)
+        self.text = text
+        self.receiverID = recieverID
+        self.timestamp = timestamp
+        self.senderID = senderID
+        self.messageType = messageType
         
     }
 }
 
 
 
-extension JsonParsing where Self == Chat {
-   
+extension Chat: JsonParsingChat {
+    
     init?(data: JSON) {
         guard let chatID = data["chatID"] as? String,
             let lastMessage = data["lastMessageID"] as? String,
             let lastMessageTimestamp = data["timestampOfLastMessage"] as? NSNumber else { return nil }
         
-        self.init(lastMessageID: lastMessage, chatID: chatID, timestamp: lastMessageTimestamp.doubleValue)
+        self.lastMessageID = lastMessage
+        self.chatID = chatID
+        self.timestamp = lastMessageTimestamp.doubleValue
+        self.chatOpponentID = nil
         
     }
-    
 }
 
 
-
-extension JsonParsing where Self == UserProfile {
+extension UserProfile: JsonParsingUserProfile {
     
     init?(searchResultSnapshot: Snapshot) {
         
@@ -57,11 +72,14 @@ extension JsonParsing where Self == UserProfile {
         }
         guard let finalJsonData = firstIterationJsonData[key] as? JSON else { return nil }
         guard let name = finalJsonData["name"] as? String,
-              let email = finalJsonData["email"] as? String else { return nil }
+            let email = finalJsonData["email"] as? String else { return nil }
         
         let profileImageURL = finalJsonData["profileImageURL"] as? String
         
-        self.init(name: name, email: email, userID: key, profileImageURL: profileImageURL)
+        self.email = email
+        self.name = name
+        self.userID = key
+        self.profileImageURL = profileImageURL
         
     }
     
@@ -73,7 +91,12 @@ extension JsonParsing where Self == UserProfile {
         
         let profileImageURL = jsonData["profileImageURL"] as? String
         
-        self.init(name: name, email: email, userID: dataSnapshot.key, profileImageURL: profileImageURL)
+        self.email = email
+        self.name = name
+        self.userID = dataSnapshot.key
+        self.profileImageURL = profileImageURL
         
     }
 }
+
+

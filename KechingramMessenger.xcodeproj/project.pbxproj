@@ -8,9 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3D2677FA210356A000A9F368 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2677F9210356A000A9F368 /* SearchBar.swift */; };
-		3D2677FC2104A8A300A9F368 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2677FB2104A8A300A9F368 /* SearchResultCell.swift */; };
 		3D2677FE2105CB6A00A9F368 /* ChatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2677FD2105CB6A00A9F368 /* ChatsView.swift */; };
-		3D2AF69C211EFD85006A7248 /* JsonParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2AF69B211EFD85006A7248 /* JsonParsing.swift */; };
+		3D2AF69C211EFD85006A7248 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2AF69B211EFD85006A7248 /* Protocols.swift */; };
 		3D3539F020DFA9FD0039A6B2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3539EF20DFA9FD0039A6B2 /* LoginViewController.swift */; };
 		3D3539F320DFBF8C0039A6B2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3539F220DFBF8C0039A6B2 /* LoginView.swift */; };
 		3D3539F620E154A20039A6B2 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D3539F520E154A20039A6B2 /* OpenSans-Regular.ttf */; };
@@ -43,9 +42,8 @@
 		05D53E14E921167706A4CB52 /* Pods_KechingramMessenger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KechingramMessenger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		201A78AE978059B3498E8632 /* Pods-KechingramMessenger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KechingramMessenger.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KechingramMessenger/Pods-KechingramMessenger.debug.xcconfig"; sourceTree = "<group>"; };
 		3D2677F9210356A000A9F368 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
-		3D2677FB2104A8A300A9F368 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		3D2677FD2105CB6A00A9F368 /* ChatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsView.swift; sourceTree = "<group>"; };
-		3D2AF69B211EFD85006A7248 /* JsonParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonParsing.swift; sourceTree = "<group>"; };
+		3D2AF69B211EFD85006A7248 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		3D3539EF20DFA9FD0039A6B2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		3D3539F220DFBF8C0039A6B2 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		3D3539F520E154A20039A6B2 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
@@ -157,7 +155,6 @@
 				3D353A0220E3DD660039A6B2 /* TableViewBackground.swift */,
 				3D8A7CA220E54BED00EADDBC /* ChatTableViewCell.swift */,
 				3D2677F9210356A000A9F368 /* SearchBar.swift */,
-				3D2677FB2104A8A300A9F368 /* SearchResultCell.swift */,
 				3D2677FD2105CB6A00A9F368 /* ChatsView.swift */,
 			);
 			path = UserChatsView;
@@ -179,7 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				3D353A0520E3FBC60039A6B2 /* DatabaseManager.swift */,
-				3D2AF69B211EFD85006A7248 /* JsonParsing.swift */,
+				3D2AF69B211EFD85006A7248 /* Protocols.swift */,
 			);
 			path = NetworkManagers;
 			sourceTree = "<group>";
@@ -431,7 +428,6 @@
 				3D3539F320DFBF8C0039A6B2 /* LoginView.swift in Sources */,
 				3DCD16C920FE417700A09CF8 /* ThreadSafeArray.swift in Sources */,
 				3D2677FE2105CB6A00A9F368 /* ChatsView.swift in Sources */,
-				3D2677FC2104A8A300A9F368 /* SearchResultCell.swift in Sources */,
 				3D8A7CAA20E6267500EADDBC /* CurrentChatController.swift in Sources */,
 				3D81B3A32109C5AF000B99A9 /* ChatNavigationBarView.swift in Sources */,
 				3D8A7CA320E54BED00EADDBC /* ChatTableViewCell.swift in Sources */,
@@ -442,7 +438,7 @@
 				3D2677FA210356A000A9F368 /* SearchBar.swift in Sources */,
 				3D3539F020DFA9FD0039A6B2 /* LoginViewController.swift in Sources */,
 				3DD0A65820DF99E700D9D18E /* AppDelegate.swift in Sources */,
-				3D2AF69C211EFD85006A7248 /* JsonParsing.swift in Sources */,
+				3D2AF69C211EFD85006A7248 /* Protocols.swift in Sources */,
 				3D353A0620E3FBC60039A6B2 /* DatabaseManager.swift in Sources */,
 				3D691B8E2107552F00E0EB90 /* MessageMetadata.swift in Sources */,
 				3D81B3AB210A25B0000B99A9 /* SettingsController.swift in Sources */,

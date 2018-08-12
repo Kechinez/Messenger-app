@@ -13,7 +13,7 @@ let imageCache = NSCache<NSString, AnyObject>()
 
 class UserChatsController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     let cellId = "chatCellId"
-    let manager = FirebaseManager()
+    let manager: ChatsObserving & ChatMetadataInteracting & UserSearching & MessageObserving = FirebaseManager()
     var isChatsControllerHiden = false
     var updatesDictionary = JSON()
     var userChats = ThreadSafeArray()
@@ -89,10 +89,12 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
         if !self.updatesDictionary.isEmpty {
             
             for (_, value) in self.updatesDictionary {
-                let chatToBeUpdated = self.userChats.threadSafeChats[(value as! Int)]
-                self.manager.getMessage(with: chatToBeUpdated.lastMessageID, inChatWith: chatToBeUpdated.chatID) { [chatToBeUpdated] (message) in
+                let arrayIndexofUpdatedChat = value as! Int
+                var chatToBeUpdated = self.userChats.threadSafeChats[arrayIndexofUpdatedChat]
+                self.manager.getMessage(with: chatToBeUpdated.lastMessageID, inChatWith: chatToBeUpdated.chatID) { (message) in
                     
                     chatToBeUpdated.lastMessageText = message.text
+                    self.userChats.threadSafeChats[arrayIndexofUpdatedChat] = chatToBeUpdated
                     self.chatsView.chatsTableView.reloadData()
                     
                 }

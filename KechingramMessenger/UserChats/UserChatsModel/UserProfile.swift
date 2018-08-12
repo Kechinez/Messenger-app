@@ -10,7 +10,8 @@ import Foundation
 
 
 
-class UserProfile: JsonParsing {
+
+struct UserProfile {
     
     let name: String
     let email: String

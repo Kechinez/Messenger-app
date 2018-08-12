@@ -12,7 +12,7 @@ import Firebase
 class CurrentChatController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITextFieldDelegate {
     let cellId = "messageCell"
     var currentChat: Chat?
-    let manager = FirebaseManager()
+    let manager: MessageSending & MessageObserving = FirebaseManager()
     var messageList: [Message] = []
     var lastMessageTimestamp: NSNumber?
     var isInitialMessage = false
@@ -155,23 +155,29 @@ class CurrentChatController: UICollectionViewController, UICollectionViewDelegat
     
     @objc func sendMessage() {
         
-        
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
         let messageTimestamp = NSNumber(value: Int(NSDate().timeIntervalSince1970))
         
         let tempMessageMetadata: JSON = ["text": keyboardView!.text, "senderID": currentUserID, "receiverID": currentChat!.chatOpponentID!, "timestamp": messageTimestamp, "isInitialMessage": NSNumber(value: isInitialMessage), "chatID": currentChat?.chatID as Any]
         
-        let messageMetadata = MessageMetadata(metadata: tempMessageMetadata)
-        
+        var messageMetadata = MessageMetadata(metadata: tempMessageMetadata)
         keyboardView!.textField.text = ""
         
-        manager.sendMessage(with: messageMetadata) { [weak self] (chatID) in
-            self?.isInitialMessage = false
-            self?.currentChat!.chatID = chatID
-            self?.observeMessages()
+        manager.sendMessage(with: messageMetadata) { [weak self] (generatedIDs) in
+            if self?.isInitialMessage == true {
+                self?.isInitialMessage = false
+                self?.currentChat!.chatID = generatedIDs.generatedChatID
+                messageMetadata.currentChatID = generatedIDs.generatedChatID
+            }
+            messageMetadata.messageID = generatedIDs.generatedMessageID
+            
+            self?.manager.updateChatEntries(with: messageMetadata, completionHandler: {
+                self?.observeMessages()
+            })
         }
+        
     }
-
+    
     
     private func estimateRectForText(text: String) -> CGRect {
         let baseRect = CGSize(width: (self.view!.frame.width - 100) * 0.7, height: 1000)

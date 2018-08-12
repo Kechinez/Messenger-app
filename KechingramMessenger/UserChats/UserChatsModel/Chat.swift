@@ -8,14 +8,14 @@
 
 import Foundation
 
-class Chat: JsonParsing {
+struct Chat {
     var lastMessageID: String
     var timestamp: Double
     var chatID: String
-    var lastMessageText: String?
-    var chatOpponentName: String?
-    var chatOpponentID: String?
-    var chatOpponentProfileImageUrl: String?
+    var lastMessageText: String? = nil
+    var chatOpponentName: String? = nil
+    var chatOpponentID: String? = nil
+    var chatOpponentProfileImageUrl: String? = nil
     
     
     init(lastMessageID: String, chatID: String, timestamp: Double) {
@@ -44,7 +44,7 @@ class Chat: JsonParsing {
     }
     
     
-    func fillChatWithDataFrom(object: Any) {
+    mutating func fillChatWithDataFrom(object: Any) {
        
         if let chatObject = object as? Chat {
             self.lastMessageID = chatObject.lastMessageID
