@@ -11,7 +11,7 @@ import Firebase
 
 let imageCache = NSCache<NSString, AnyObject>()
 
-class UserChatsController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
+class UserChatsController: UIViewController, UITableViewDelegate, UITextFieldDelegate {
     let cellId = "chatCellId"
     let manager: ChatsObserving & ChatMetadataInteracting & UserSearching & MessageObserving = FirebaseManager()
     var isChatsControllerHiden = false
@@ -20,6 +20,7 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
     var isSearchEnabled = false
     var searchResult: UserProfile?
     var currentUserProfile: UserProfile!
+    
     unowned var chatsView: ChatsView {
         return self.view as! ChatsView
     }
@@ -87,23 +88,19 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
         self.isChatsControllerHiden = false
         
         if !self.updatesDictionary.isEmpty {
-            
             for (_, value) in self.updatesDictionary {
                 let arrayIndexofUpdatedChat = value as! Int
                 var chatToBeUpdated = self.userChats.threadSafeChats[arrayIndexofUpdatedChat]
+                
                 self.manager.getMessage(with: chatToBeUpdated.lastMessageID, inChatWith: chatToBeUpdated.chatID) { (message) in
-                    
                     chatToBeUpdated.lastMessageText = message.text
                     self.userChats.threadSafeChats[arrayIndexofUpdatedChat] = chatToBeUpdated
                     self.chatsView.chatsTableView.reloadData()
-                    
                 }
             }
         } else {
            self.chatsView.chatsTableView.reloadData()
         }
-        // обновалять таблицу даже если !self.updatesDictionary.isEmpty тру
-        
         
     }
     
@@ -272,23 +269,21 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     
-    func updateSearchResults(for searchController: UISearchController) {
-        
-    }
+}
+
+
+
+
+
+//MARK: TableView data source methods
+extension UserChatsController: UITableViewDataSource {
     
-    
-    
-    
-    
-    
-    // MARK: - Table view data source
-    
-     func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     
-     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numberOfRows = 0
         if searchResult != nil {
             numberOfRows = 1
@@ -298,22 +293,13 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
     
     
     
-     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatTableViewCell
-        
         cell.userImage.image = nil
-        
         
         if isSearchEnabled {
             cell.nameLabel.text = searchResult!.name
-            
-            if let profileImageUrl = searchResult!.profileImageURL {
-                if let image = imageCache.object(forKey: NSString(string: profileImageUrl)) as? UIImage {
-                   cell.userImage.image = image
-                }
-            }
-            
-            
+            cell.userImage.setupImageFromCache(using: searchResult!.profileImageURL)
             cell.messageLabel.text = searchResult!.email
             cell.timeLabel.text = ""
         } else {
@@ -321,21 +307,13 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
             cell.messageLabel.text = chatInCurrentCell.lastMessageText
             cell.nameLabel.text = chatInCurrentCell.chatOpponentName
             cell.timeLabel.text = chatInCurrentCell.transformTimestampToStringDate()
-            
-            if let profileImageUrl = chatInCurrentCell.chatOpponentProfileImageUrl {
-                if let image = imageCache.object(forKey: NSString(string: profileImageUrl)) as? UIImage {
-                    cell.userImage.image = image
-                }
-            }
+            cell.userImage.setupImageFromCache(using: chatInCurrentCell.chatOpponentProfileImageUrl)
         }
-        
-        
-        
         return cell
     }
     
     
-     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let navigationController = self.navigationController else { return }
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .vertical
@@ -350,14 +328,5 @@ class UserChatsController: UIViewController, UITableViewDataSource, UITableViewD
         navigationController.pushViewController(chatController, animated: true)
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
 }
-
 

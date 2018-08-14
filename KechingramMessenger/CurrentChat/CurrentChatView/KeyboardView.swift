@@ -69,6 +69,8 @@ class KeyboardView: UIView {
         
     }
     
+    
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -101,10 +103,12 @@ class KeyboardView: UIView {
         sendButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         sendButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
         
-        
-        
     }
     
+    
+    
+    
+    // MARK: - Animation methods
     
     func animateKeyboardWillShow(with keyboardHeight: CGFloat, animationDuration: Double) {
         self.keyboardBottomAnchor!.constant = -keyboardHeight

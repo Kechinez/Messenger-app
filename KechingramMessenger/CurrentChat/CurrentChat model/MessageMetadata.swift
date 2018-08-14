@@ -57,7 +57,4 @@ struct MessageMetadata {
         
     }
     
-    
-    
-    
 }

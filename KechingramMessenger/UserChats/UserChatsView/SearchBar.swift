@@ -59,8 +59,8 @@ class SearchBar: UIView {
         label.textColor = UIColor.customGreen()
         label.text = "Search results:"
         return label
-       
     }()
+    
     var textLabelTopConstraint: NSLayoutConstraint?
     var containerViewWidthConstraint: NSLayoutConstraint?
     var backToChatButtonTrailingConstraint: NSLayoutConstraint?
@@ -120,6 +120,9 @@ class SearchBar: UIView {
     
     
     
+    
+    //MARK: - Animation methods
+    
     func animateSearchBegining() {
         containerViewWidthConstraint!.isActive = false
         containerViewWidthConstraint = containerView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.7)
@@ -129,11 +132,9 @@ class SearchBar: UIView {
         backToChatButtonTrailingConstraint = backToChatsButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -25)
         backToChatButtonTrailingConstraint!.isActive = true
         
-        UIView.animate(withDuration: 0.5) {
-            self.layoutIfNeeded()
-        }
-        
+        animateWithDuration(duration: 0.5)
     }
+    
     
 
     func animateSearchStop(animated: Bool) {
@@ -146,14 +147,13 @@ class SearchBar: UIView {
         backToChatButtonTrailingConstraint!.isActive = true
         
         if animated {
-            UIView.animate(withDuration: 0.5) {
-                self.layoutIfNeeded()
-            }
+            animateWithDuration(duration: 0.5)
         } else {
             self.layoutIfNeeded()
         }
         
     }
+    
     
     
     func animateTextLabelDisapperaing(animated: Bool) {
@@ -162,9 +162,7 @@ class SearchBar: UIView {
         textLabelTopConstraint!.isActive = true
         
         if animated {
-            UIView.animate(withDuration: 0.5) {
-                self.layoutIfNeeded()
-            }
+            animateWithDuration(duration: 0.5)
         } else {
             self.layoutIfNeeded()
         }
@@ -172,14 +170,20 @@ class SearchBar: UIView {
     }
     
     
+    
     func animateTextLabelAppearing() {
 
-        
         textLabelTopConstraint!.isActive = false
         textLabelTopConstraint = textLabel.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 10)
         textLabelTopConstraint!.isActive = true
         
-        UIView.animate(withDuration: 0.5) {
+        animateWithDuration(duration: 0.5)
+    }
+   
+    
+    
+    private func animateWithDuration(duration: Double) {
+        UIView.animate(withDuration: duration) {
             self.layoutIfNeeded()
         }
     }

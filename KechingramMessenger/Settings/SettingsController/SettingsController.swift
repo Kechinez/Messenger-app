@@ -11,43 +11,41 @@ import UIKit
 class SettingsController: UIViewController {
     let manager = FirebaseManager()
     var currentUserProfile: UserProfile?
+    
     unowned var settingsView: SettingsView {
         return self.view as! SettingsView
     }
     
     
+    
+    
+    // MARK: - Controller lifecycle methods
+    
     override func loadView() {
         self.view = SettingsView()
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //settingsView.setImageCornerRadius()
         settingsView.fillSettingsViewWith(userProfile: currentUserProfile!)
+        settingsView.userProfileImage.setupImageFromCache(using: currentUserProfile!.profileImageURL)
         
-        if let userProfileImageUrl = currentUserProfile?.profileImageURL {
-            if let image = imageCache.object(forKey: NSString(string: userProfileImageUrl)) as? UIImage {
-                self.settingsView.userProfileImage.image = image
-            } else {
-                manager.uploadProfileImage(with: userProfileImageUrl) { (data) in
-                    guard let image = UIImage(data: data) else { return }
-                    imageCache.setObject(image, forKey: NSString(string: userProfileImageUrl))
-                    self.settingsView.userProfileImage.image = image
-                }
-            }
-            
+        guard settingsView.userProfileImage.image == nil,
+              let url = currentUserProfile?.profileImageURL else { return }
+        
+        manager.uploadProfileImage(with: url) { (data) in
+            guard let image = UIImage(data: data) else { return }
+            imageCache.setObject(image, forKey: NSString(string: url))
+            self.settingsView.userProfileImage.image = image
         }
-        
     }
 
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         settingsView.setImageCornerRadius()
     }
-    
-    
-    
     
 }

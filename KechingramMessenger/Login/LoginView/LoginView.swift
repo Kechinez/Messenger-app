@@ -100,12 +100,11 @@ class LoginView: UIView {
     private var containterViewHeight: NSLayoutConstraint?
     
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        
         self.addSubview(segmentedControl)
-        //self.addSubview(nameTextField)
         self.addSubview(containerView)
         self.addSubview(logRegButton)
         self.bringSubview(toFront: containerView)
@@ -116,7 +115,6 @@ class LoginView: UIView {
         containerView.addSubview(secondSeparator)
         
         self.setUpConstraints()
-        
         
     }
     
@@ -132,20 +130,6 @@ class LoginView: UIView {
         gradientLayer.frame = frame
         self.layer.insertSublayer(gradientLayer, at: 0)
         
-    }
-    
-    
-    func setUpButtonsActionMethod(using viewController: LoginViewController) {
-        segmentedControl.addTarget(viewController, action: #selector(LoginViewController.segmentedControlIsChanged(sender:)), for: .valueChanged)
-        logRegButton.addTarget(viewController, action: #selector(LoginViewController.registerOrLoginUser(sender:)), for: .touchUpInside)
-    }
-    
-    
-    
-    func setUpTextFiedlsDelegate(using viewController: LoginViewController) {
-        emailTextField.delegate = viewController
-        passwordTextField.delegate = viewController
-        nameTextField.delegate = viewController
     }
     
     
@@ -197,6 +181,26 @@ class LoginView: UIView {
     }
     
     
+    
+    
+    // MARK: Setup action methods to UI
+    
+    func setUpButtonsActionMethod(using viewController: LoginViewController) {
+        segmentedControl.addTarget(viewController, action: #selector(LoginViewController.segmentedControlIsChanged(sender:)), for: .valueChanged)
+        logRegButton.addTarget(viewController, action: #selector(LoginViewController.registerOrLoginUser(sender:)), for: .touchUpInside)
+    }
+    
+    
+    func setUpTextFiedlsDelegate(using viewController: LoginViewController) {
+        emailTextField.delegate = viewController
+        passwordTextField.delegate = viewController
+        nameTextField.delegate = viewController
+    }
+    
+    
+    
+    // MARK: Animation methods
+    
     func animateAppearingOfNameTextField() {
         logRegButton.tag = ButtonType.RegisterButton.rawValue
         
@@ -244,13 +248,11 @@ class LoginView: UIView {
     
     }
     
+    
+    
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-
-
-
-
 
 }

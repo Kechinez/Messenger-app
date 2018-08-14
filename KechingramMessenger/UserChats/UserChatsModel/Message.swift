@@ -24,16 +24,6 @@ struct Message {
     let messageType: MessageType
     
     
-//    init(text: String, timestamp: NSNumber, senderID: String, receiverID: String, messageType: MessageType) {
-//        self.text = text
-//        self.timestamp = timestamp
-//        self.senderID = senderID
-//        self.receiverID = receiverID
-//        self.messageType = messageType
-//    }
-    
-    
-    
     func getCurrentUserChatOpponentID() -> String {
         return (self.messageType == .Outgoing ? receiverID : senderID)
     }

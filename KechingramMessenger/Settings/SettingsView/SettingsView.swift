@@ -56,6 +56,8 @@ class SettingsView: UIView {
         return view
     }()
     
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(userProfileImage)

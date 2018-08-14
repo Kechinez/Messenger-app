@@ -53,21 +53,15 @@ class ChatTableViewCell: UITableViewCell {
         self.setUpImageDrawings()
     }
     
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        
-//            
-//            
-//    }
 
-    
     private func setUpImageDrawings() {
-        userImage.layer.cornerRadius = 29//44
+        userImage.layer.cornerRadius = 29
         userImage.layer.masksToBounds = false
         userImage.clipsToBounds = true
         userImage.layer.borderColor = UIColor.customGreen().cgColor
@@ -96,11 +90,5 @@ class ChatTableViewCell: UITableViewCell {
         
     }
     
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
 
 }
