@@ -13,32 +13,15 @@ public enum MessageType {
     case Outgoing
 }
 
-class Message {
+
+
+struct Message {
     
     let text: String
     let receiverID: String
     let senderID: String
     let timestamp: NSNumber
     let messageType: MessageType
-    
-    
-    init?(data: JSON, currentUserID: String) {
-        guard let text = data["text"] as? String,
-              let recieverID = data["receiverID"] as? String,
-              let senderID = data["senderID"] as? String,
-              let timestamp = data["timestamp"] as? NSNumber else { return nil }
-        
-        self.text = text
-        self.receiverID = recieverID
-        self.senderID = senderID
-        self.timestamp = timestamp
-        
-        if currentUserID == senderID {
-            self.messageType = .Outgoing
-        } else {
-            self.messageType = .Incoming
-        }
-    }
     
     
     func getCurrentUserChatOpponentID() -> String {

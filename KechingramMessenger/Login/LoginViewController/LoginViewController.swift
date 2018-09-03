@@ -8,7 +8,7 @@
 
 import UIKit
 import Firebase
-class LoginViewController: UIViewController, UITextFieldDelegate {
+class LoginViewController: UIViewController {
 
     unowned var loginView: LoginView {
         return self.view as! LoginView
@@ -28,7 +28,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     
-    
+    // MARK: - Controller lifecycle methods
     
     override func loadView() {
         self.view = LoginView()
@@ -60,79 +60,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    
-    // TextField delegate methods
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
+ 
     
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        textField.setUpTextFieldTyppingAttributes()
-        return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        
-        if textField.textColor == UIColor.customRed() {
-            textField.text = ""
-        }
-        
-        
-    }
-    
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        guard textField.text!.count > 0 else { return }
-        
-        switch textField.tag {
-        case TextFieldType.EmailTextField.rawValue:
-            guard textField.text!.isEmail() else {
-                self.showTextFieldWarningOn(textField: textField)
-                isInputDataValid.emailAddress = false
-                return
-            }
-            isInputDataValid.emailAddress = true
-       
-        case TextFieldType.PasswordTextField.rawValue:
-            guard textField.text!.isPasswordLenghtOk() else {
-                self.showTextFieldWarningOn(textField: textField)
-                isInputDataValid.password = false
-                return
-            }
-            isInputDataValid.password = true
-        
-        case TextFieldType.NameTextField.rawValue:
-            guard textField.text!.areValidCharsUsedInName() else {
-                self.showTextFieldWarningOn(textField: textField)
-                isInputDataValid.name = false
-                return
-            }
-            isInputDataValid.name = true
-            
-        default: break
-        }
-    }
-    
-    
-    private func showTextFieldWarningOn(textField: UITextField) {
-        switch textField.tag {
-        case TextFieldType.EmailTextField.rawValue:
-            textField.attributedText = NSAttributedString(string: "Email address is not correct!", attributes: NSAttributedString.customAttrubutesFor(attributesSet: .PlaceholderAttributes, with: .customRed()))
-        case TextFieldType.PasswordTextField.rawValue:
-            textField.attributedText = NSAttributedString(string: "Password is less than 8 symbols!", attributes: NSAttributedString.customAttrubutesFor(attributesSet: .PlaceholderAttributes, with: .customRed()))
-            
-        case TextFieldType.NameTextField.rawValue:
-            textField.attributedText = NSAttributedString(string: "Name contains invalid letters!", attributes: NSAttributedString.customAttrubutesFor(attributesSet: .PlaceholderAttributes, with: .customRed()))
-        default: break
-        }
-    }
-    
-    
-    
-    
+    // MARK: - Entering apps methods
     
     private func loginUser() {
         Auth.auth().signIn(withEmail: emailTextField.text!, password: passwordTextField.text!) { [weak self] (user, error) in
@@ -162,14 +93,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-  
-    private func presentUserChatsViewController()   {
-        let userChatsViewController = UINavigationController(rootViewController: UserChatsController())
-        self.present(userChatsViewController, animated: true, completion: nil)
-        
-    }
-    
-    
     @objc func registerOrLoginUser(sender: UIButton) {
         
         switch sender.tag {
@@ -187,6 +110,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     
+
+    // MARK: - Additional methods
+    
     @objc func segmentedControlIsChanged(sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
             loginView.animateDisappearingNameTextField()
@@ -197,12 +123,92 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     
+    private func presentUserChatsViewController()   {
+        let userChatsViewController = UINavigationController(rootViewController: UserChatsController())
+        self.present(userChatsViewController, animated: true, completion: nil)
+        
+    }
+    
+    
+    private func showTextFieldWarningOn(textField: UITextField) {
+        switch textField.tag {
+        case TextFieldType.EmailTextField.rawValue:
+            textField.attributedText = NSAttributedString(string: "Email address is not correct!", attributes: NSAttributedString.customAttrubutesFor(attributesSet: .PlaceholderAttributes, with: .customRed()))
+        case TextFieldType.PasswordTextField.rawValue:
+            textField.attributedText = NSAttributedString(string: "Password is less than 8 symbols!", attributes: NSAttributedString.customAttrubutesFor(attributesSet: .PlaceholderAttributes, with: .customRed()))
+            
+        case TextFieldType.NameTextField.rawValue:
+            textField.attributedText = NSAttributedString(string: "Name contains invalid letters!", attributes: NSAttributedString.customAttrubutesFor(attributesSet: .PlaceholderAttributes, with: .customRed()))
+        default: break
+        }
+    }
+
+
 }
 
 
 
-//MARK: - Input data string checking extention
 
+
+// MARK: - UITextFieldDelegate methods
+extension LoginViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        textField.setUpTextFieldTyppingAttributes()
+        return true
+    }
+    
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+        if textField.textColor == UIColor.customRed() {
+            textField.text = ""
+        }
+    }
+    
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard textField.text!.count > 0 else { return }
+        
+        switch textField.tag {
+        case TextFieldType.EmailTextField.rawValue:
+            guard textField.text!.isEmail() else {
+                self.showTextFieldWarningOn(textField: textField)
+                isInputDataValid.emailAddress = false
+                return
+            }
+            isInputDataValid.emailAddress = true
+            
+        case TextFieldType.PasswordTextField.rawValue:
+            guard textField.text!.isPasswordLenghtOk() else {
+                self.showTextFieldWarningOn(textField: textField)
+                isInputDataValid.password = false
+                return
+            }
+            isInputDataValid.password = true
+            
+        case TextFieldType.NameTextField.rawValue:
+            guard textField.text!.areValidCharsUsedInName() else {
+                self.showTextFieldWarningOn(textField: textField)
+                isInputDataValid.name = false
+                return
+            }
+            isInputDataValid.name = true
+            
+        default: break
+        }
+    }
+}
+
+
+
+
+//MARK: - Input data string checking extention
 extension String {
     func isEmail() -> Bool {
         let firstPart = "[A-Z0-9a-z]([A-Z0-9a-z._%+-]{0,30}[A-Z0-9a-z])?"

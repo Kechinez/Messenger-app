@@ -28,6 +28,7 @@ class ChatsView: UIView {
     
     var searchBarHeightConstraint: NSLayoutConstraint?
 
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(searchBar)
@@ -36,10 +37,34 @@ class ChatsView: UIView {
     }
     
     
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    
+    private func setUpConstraints() {
+        
+        searchBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor).isActive = true
+        searchBarHeightConstraint = searchBar.heightAnchor.constraint(equalToConstant: 46)
+        searchBarHeightConstraint!.isActive = true
+        searchBar.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        searchBar.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        
+        chatsTableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
+        chatsTableView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        chatsTableView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        chatsTableView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        
+        
+    }
+    
+    
+    
+    
+    
+    // MARK: - Animation methods
     
     func animateSearchResultCancel(animated: Bool) {
         searchBarHeightConstraint!.isActive = false
@@ -67,6 +92,10 @@ class ChatsView: UIView {
     }
     
     
+    
+    
+    // MARK: - Activate buttons actions
+    
     func activateButtonsActionTargets(using viewController: UserChatsController) {
         if let image = UIImage(named: "logout.png") {
             image.withRenderingMode(.alwaysTemplate)
@@ -82,26 +111,8 @@ class ChatsView: UIView {
             viewController.navigationItem.rightBarButtonItem = settingsButton
         }
         
-        
         searchBar.backToChatsButton.addTarget(viewController, action: #selector(UserChatsController.backToChats), for: .touchUpInside)
     }
     
     
-    
-    private func setUpConstraints() {
-        
-        searchBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor).isActive = true
-        searchBarHeightConstraint = searchBar.heightAnchor.constraint(equalToConstant: 46)
-        searchBarHeightConstraint!.isActive = true
-        searchBar.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        searchBar.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        
-        chatsTableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
-        chatsTableView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        chatsTableView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        chatsTableView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        
-        
-    }
-
 }

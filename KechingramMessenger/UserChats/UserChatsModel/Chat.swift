@@ -8,14 +8,21 @@
 
 import Foundation
 
-class Chat {
+struct Chat {
     var lastMessageID: String
     var timestamp: Double
     var chatID: String
-    var lastMessageText: String?
-    var chatOpponentName: String?
-    var chatOpponentID: String?
-    var chatOpponentProfileImageUrl: String?
+    var lastMessageText: String? = nil
+    var chatOpponentName: String? = nil
+    var chatOpponentID: String? = nil
+    var chatOpponentProfileImageUrl: String? = nil
+    
+    
+    init(lastMessageID: String, chatID: String, timestamp: Double) {
+        self.lastMessageID = lastMessageID
+        self.chatID = chatID
+        self.timestamp = timestamp
+    }
     
     
     init(partlyInitializingWith chatOpponentName: String, chatOpponentID: String) {
@@ -27,16 +34,6 @@ class Chat {
         self.lastMessageText = ""
     }
     
-    init?(data: JSON) {
-        guard let chatID = data["chatID"] as? String,
-            let lastMessage = data["lastMessageID"] as? String,
-            let lastMessageTimestamp = data["timestampOfLastMessage"] as? NSNumber else { return nil }
-        
-        self.lastMessageID = lastMessage
-        self.chatID = chatID
-        self.timestamp = lastMessageTimestamp.doubleValue 
-        
-    }
     
     
     func transformTimestampToStringDate() -> String {
@@ -47,7 +44,7 @@ class Chat {
     }
     
     
-    func fillChatWithDataFrom(object: Any) {
+    mutating func fillChatWithDataFrom(object: Any) {
        
         if let chatObject = object as? Chat {
             self.lastMessageID = chatObject.lastMessageID
