@@ -73,7 +73,27 @@ extension UITextField {
     
 }
 
+extension UIImageView {
+    func setupImageFromCache(using url: String?) {
+        guard let url = url else { return }
+        guard let image = imageCache.object(forKey: NSString(string: url)) as? UIImage else { return }
+        self.image = image
+    }
+    
+}
 
+extension UIImage {
+    
+    convenience init?(using url: String?) {
+        guard let url = url else { return nil }
+        
+        guard let image = imageCache.object(forKey: NSString(string: url)) as? Data else { return nil }
+        
+        self.init(data: image)
+        
+        
+    }
+}
 
 
 

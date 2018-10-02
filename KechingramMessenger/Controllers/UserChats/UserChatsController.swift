@@ -40,6 +40,7 @@ class UserChatsController: UIViewController, UITableViewDelegate, UITextFieldDel
         self.view = ChatsView()
     }
     
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,6 +65,7 @@ class UserChatsController: UIViewController, UITableViewDelegate, UITextFieldDel
         
     }
 
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
