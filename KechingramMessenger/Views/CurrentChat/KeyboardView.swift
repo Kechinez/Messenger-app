@@ -50,7 +50,7 @@ class KeyboardView: UIView {
      var keyboardBottomAnchor: NSLayoutConstraint?
     
     
-    
+    //MARK: - init
     init(with viewController: CurrentChatController) {
         self.parentController = viewController
         super.init(frame: CGRect.zero)
@@ -64,19 +64,15 @@ class KeyboardView: UIView {
         
         sendButton.addTarget(parentController, action: #selector(CurrentChatController.sendMessage), for: .touchUpInside)
         textField.delegate = parentController
-        
         setUpConstraints()
-        
     }
-    
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     
-    
+    //MARK: - Updating constraints
     private func setUpConstraints() {
         self.keyboardBottomAnchor = self.bottomAnchor.constraint(equalTo: parentController.view.bottomAnchor)
         self.keyboardBottomAnchor!.isActive = true
@@ -102,28 +98,20 @@ class KeyboardView: UIView {
         sendButton.widthAnchor.constraint(equalToConstant: 34).isActive = true
         sendButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         sendButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
-        
     }
-    
-    
-    
     
     // MARK: - Animation methods
-    
     func animateKeyboardWillShow(with keyboardHeight: CGFloat, animationDuration: Double) {
-        self.keyboardBottomAnchor!.constant = -keyboardHeight
-        
+        self.keyboardBottomAnchor?.constant = -keyboardHeight
         UIView.animate(withDuration: animationDuration) {
             if let superVeiew = self.superview {
                 superVeiew.layoutIfNeeded()
             }
         }
     }
-    
-    
     
     func animateKeyboardWillHide(with keyboardHeight: CGFloat, animationDuration: Double) {
-        self.keyboardBottomAnchor!.constant = 0
+        self.keyboardBottomAnchor?.constant = 0
         
         UIView.animate(withDuration: animationDuration) {
             if let superVeiew = self.superview {
@@ -132,5 +120,4 @@ class KeyboardView: UIView {
         }
     }
     
-
 }

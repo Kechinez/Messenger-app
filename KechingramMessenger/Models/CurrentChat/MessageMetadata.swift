@@ -18,35 +18,26 @@ struct MessageMetadata {
     var currentChatID: String?
     var messageID: String?
     
-    
-    
-    
-    
-    init(metadata: JSON) {
-        let text = metadata["text"] as! String
+    init?(metadata: JSON) {
+        guard let text = metadata["text"] as? String,
+              let timestamp = metadata["timestamp"] as? NSNumber,
+              let senderID = metadata["senderID"] as? String,
+              let receiverID = metadata["receiverID"] as? String,
+              let isInitialMessage = metadata["isInitialMessage"] as? NSNumber else { return nil }
+        
         self.text = text
-        
-        let timestamp = metadata["timestamp"] as! NSNumber
         self.timestamp = timestamp
-        
-        let senderID = metadata["senderID"] as! String
         self.senderID = senderID
-        
-        let receiverID = metadata["receiverID"] as! String
         self.receiverID = receiverID
-        
-        let isInitialMessage = metadata["isInitialMessage"] as! NSNumber
         self.isInitialMessage = isInitialMessage.boolValue
         
         guard let currentChatID = metadata["chatID"] as? String else { return }
         self.currentChatID = currentChatID
     }
     
-    
     func messageJsonBuilding() -> JSON {
         return ["senderID": self.senderID, "receiverID": self.receiverID, "text": self.text, "timestamp": self.timestamp]
     }
-    
     
     func chatUpdatesBuilding(requiredChatID: Bool) -> JSON {
         if requiredChatID {
@@ -54,7 +45,5 @@ struct MessageMetadata {
         } else {
             return ["timestampOfLastMessage": self.timestamp, "lastMessageID": self.messageID!]
         }
-        
     }
-    
 }

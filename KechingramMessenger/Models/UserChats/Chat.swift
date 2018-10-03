@@ -17,13 +17,12 @@ struct Chat {
     var chatOpponentID: String? = nil
     var chatOpponentProfileImageUrl: String? = nil
     
-    
+    //MARK: - init
     init(lastMessageID: String, chatID: String, timestamp: Double) {
         self.lastMessageID = lastMessageID
         self.chatID = chatID
         self.timestamp = timestamp
     }
-    
     
     init(partlyInitializingWith chatOpponentName: String, chatOpponentID: String) {
         self.lastMessageID = ""
@@ -34,18 +33,15 @@ struct Chat {
         self.lastMessageText = ""
     }
     
-    
-    
-    func transformTimestampToStringDate() -> String {
+    //MARK: Supporting methods
+    func buildingStringFromTimestamp() -> String {
         let date = Date(timeIntervalSince1970: timestamp)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "hh:mm:ss a"
         return dateFormatter.string(from: date)
     }
     
-    
     mutating func fillChatWithDataFrom(object: Any) {
-       
         if let chatObject = object as? Chat {
             self.lastMessageID = chatObject.lastMessageID
             self.timestamp = chatObject.timestamp
@@ -61,14 +57,12 @@ struct Chat {
         }
     }
     
-    
-    func determineIndexOfUpdatedChat(in userChats: [Chat]) -> Int {
-        var result = 0
-        for (index, chat) in userChats.enumerated() where chat.chatID == self.chatID {
-            result = index
-            break
-        }
-        return result
-    }
-    
+//    func findingIndexOfUpdatedChat(in userChats: [Chat]) -> Int {
+//        var result = 0
+//        for (index, chat) in userChats.enumerated() where chat.chatID == self.chatID {
+//            result = index
+//            break
+//        }
+//        return result
+//    }
 }

@@ -84,16 +84,42 @@ extension UIImageView {
 
 extension UIImage {
     
+    func tint(with color: UIColor) -> UIImage {
+        var image = withRenderingMode(.alwaysTemplate)
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        color.set()
+        
+        image.draw(in: CGRect(origin: .zero, size: size))
+        image = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return image
+    }
+    
     convenience init?(using url: String?) {
         guard let url = url else { return nil }
-        
         guard let image = imageCache.object(forKey: NSString(string: url)) as? Data else { return nil }
-        
         self.init(data: image)
-        
-        
     }
 }
 
+extension String {
+    func isEmail() -> Bool {
+        let firstPart = "[A-Z0-9a-z]([A-Z0-9a-z._%+-]{0,30}[A-Z0-9a-z])?"
+        let serverPart = "([A-Z0-9a-z]([A-Z0-9a-z-]{0,30}[A-Z0-9a-z])?\\.){1,5}"
+        let emailRegex = firstPart + "@" + serverPart + "[A-Za-z]{2,6}"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        return emailPredicate.evaluate(with: self)
+    }
+    
+    func areValidCharsUsedInName() -> Bool {
+        let allowedChars = CharacterSet.alphanumerics
+        return (self.trimmingCharacters(in: allowedChars) == "")
+    }
+    
+    func isPasswordLenghtOk() -> Bool {
+        return (self.count > 8 && self.count < 14)
+    }
+    
+}
 
 

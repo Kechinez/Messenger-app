@@ -73,9 +73,8 @@ class SearchBar: UIView {
         return searchTextField.text!
     }
     
-    
-    
-    init() {
+    //MARK: - init
+    override init(frame: CGRect) {
         super.init(frame: CGRect.zero)
         self.backgroundColor = #colorLiteral(red: 0.09279822335, green: 0.09279822335, blue: 0.09279822335, alpha: 1)
         self.addSubview(textLabel)
@@ -84,16 +83,15 @@ class SearchBar: UIView {
         self.addSubview(viewForButtonVerticalCentring)
         containerView.addSubview(searchImage)
         containerView.addSubview(searchTextField)
-
+        
         setUpConstraints()
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
+    //MARK: - updating constraints
     func setUpConstraints() {
         containerView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         containerViewWidthConstraint = containerView.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -14)
@@ -116,60 +114,52 @@ class SearchBar: UIView {
         viewForButtonVerticalCentring.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.23, constant: -7).isActive = true
         
         backToChatButtonTrailingConstraint = backToChatsButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 40)
-        backToChatButtonTrailingConstraint!.isActive = true
+        backToChatButtonTrailingConstraint?.isActive = true
         backToChatsButton.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
         backToChatsButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         backToChatsButton.widthAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
        
         textLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         self.textLabelTopConstraint = textLabel.topAnchor.constraint(equalTo: containerView.topAnchor)
-        self.textLabelTopConstraint!.isActive = true
+        self.textLabelTopConstraint?.isActive = true
         textLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 7).isActive = true
         textLabel.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -14).isActive = true
     }
     
-    
-    
-    
+
     //MARK: - Animation methods
-    
     func animateSearchBegining() {
-        containerViewWidthConstraint!.isActive = false
+        containerViewWidthConstraint?.isActive = false
         containerViewWidthConstraint = containerView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.77)
-        containerViewWidthConstraint!.isActive = true
+        containerViewWidthConstraint?.isActive = true
         
-        backToChatButtonTrailingConstraint!.isActive = false
+        backToChatButtonTrailingConstraint?.isActive = false
         backToChatButtonTrailingConstraint = backToChatsButton.centerXAnchor.constraint(equalTo: viewForButtonVerticalCentring.centerXAnchor)
-        backToChatButtonTrailingConstraint!.isActive = true
+        backToChatButtonTrailingConstraint?.isActive = true
         
         animateWithDuration(duration: 0.5)
     }
     
-    
-
     func animateSearchStop(animated: Bool) {
-        containerViewWidthConstraint!.isActive = false
+        containerViewWidthConstraint?.isActive = false
         containerViewWidthConstraint = containerView.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -14)
-        containerViewWidthConstraint!.isActive = true
+        containerViewWidthConstraint?.isActive = true
         
-        backToChatButtonTrailingConstraint!.isActive = false
+        backToChatButtonTrailingConstraint?.isActive = false
         backToChatButtonTrailingConstraint = backToChatsButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 40)
-        backToChatButtonTrailingConstraint!.isActive = true
+        backToChatButtonTrailingConstraint?.isActive = true
         
         if animated {
             animateWithDuration(duration: 0.5)
         } else {
             self.layoutIfNeeded()
         }
-        
     }
     
-    
-    
     func animateTextLabelDisapperaing(animated: Bool) {
-        textLabelTopConstraint!.isActive = false
+        textLabelTopConstraint?.isActive = false
         textLabelTopConstraint = textLabel.topAnchor.constraint(equalTo: containerView.topAnchor)
-        textLabelTopConstraint!.isActive = true
+        textLabelTopConstraint?.isActive = true
         
         if animated {
             animateWithDuration(duration: 0.5)
@@ -179,23 +169,17 @@ class SearchBar: UIView {
         animateSearchStop(animated: animated)
     }
     
-    
-    
     func animateTextLabelAppearing() {
-
-        textLabelTopConstraint!.isActive = false
+        textLabelTopConstraint?.isActive = false
         textLabelTopConstraint = textLabel.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 10)
-        textLabelTopConstraint!.isActive = true
+        textLabelTopConstraint?.isActive = true
         
         animateWithDuration(duration: 0.5)
     }
    
-    
-    
     private func animateWithDuration(duration: Double) {
         UIView.animate(withDuration: duration) {
             self.layoutIfNeeded()
         }
     }
-    
 }

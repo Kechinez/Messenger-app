@@ -8,16 +8,11 @@
 
 import Foundation
 
-
-
-
 struct UserProfile {
-    
     let name: String
     let email: String
     let userID: String
     var profileImageURL: String?
-    
     
     init(name: String, email: String, userID: String, profileImageURL: String?) {
         self.name = name

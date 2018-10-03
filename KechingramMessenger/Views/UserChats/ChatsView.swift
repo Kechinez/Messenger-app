@@ -28,7 +28,7 @@ class ChatsView: UIView {
     
     var searchBarHeightConstraint: NSLayoutConstraint?
 
-    
+    //MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(searchBar)
@@ -36,19 +36,16 @@ class ChatsView: UIView {
         setUpConstraints()
     }
     
-    
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
+    //MARK: - updating constraints
     private func setUpConstraints() {
         
         searchBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor).isActive = true
         searchBarHeightConstraint = searchBar.heightAnchor.constraint(equalToConstant: 46)
-        searchBarHeightConstraint!.isActive = true
+        searchBarHeightConstraint?.isActive = true
         searchBar.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
         searchBar.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         
@@ -56,20 +53,14 @@ class ChatsView: UIView {
         chatsTableView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         chatsTableView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         chatsTableView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        
-        
+
     }
     
-    
-    
-    
-    
     // MARK: - Animation methods
-    
     func animateSearchResultCancel(animated: Bool) {
-        searchBarHeightConstraint!.isActive = false
+        searchBarHeightConstraint?.isActive = false
         searchBarHeightConstraint = searchBar.heightAnchor.constraint(equalToConstant: 46)
-        searchBarHeightConstraint!.isActive = true
+        searchBarHeightConstraint?.isActive = true
         if animated {
             UIView.animate(withDuration: 0.5) {
                 self.layoutIfNeeded()
@@ -80,11 +71,10 @@ class ChatsView: UIView {
         searchBar.animateTextLabelDisapperaing(animated: animated)
     }
     
-    
     func animateSearchResultAppearing() {
-        searchBarHeightConstraint!.isActive = false
+        searchBarHeightConstraint?.isActive = false
         searchBarHeightConstraint = searchBar.heightAnchor.constraint(equalToConstant: 76)
-        searchBarHeightConstraint!.isActive = true
+        searchBarHeightConstraint?.isActive = true
         UIView.animate(withDuration: 0.5) {
             self.layoutIfNeeded()
         }
@@ -92,10 +82,7 @@ class ChatsView: UIView {
     }
     
     
-    
-    
     // MARK: - Activate buttons actions
-    
     func activateButtonsActionTargets(using viewController: UserChatsController) {
         if let image = UIImage(named: "logout.png") {
             image.withRenderingMode(.alwaysTemplate)
@@ -103,16 +90,12 @@ class ChatsView: UIView {
             logOutButton.tintColor = UIColor.customRed()
             viewController.navigationItem.leftBarButtonItem = logOutButton
         }
-        
         if let image = UIImage(named: "settings.png") {
             image.withRenderingMode(.alwaysTemplate)
             let settingsButton = UIBarButtonItem(image: image, style: .plain, target: viewController, action: #selector(UserChatsController.changeUserSettings))
             settingsButton.tintColor = UIColor.customRed()
             viewController.navigationItem.rightBarButtonItem = settingsButton
         }
-        
         searchBar.backToChatsButton.addTarget(viewController, action: #selector(UserChatsController.backToChats), for: .touchUpInside)
     }
-    
-    
 }

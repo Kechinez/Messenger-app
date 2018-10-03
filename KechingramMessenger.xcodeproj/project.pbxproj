@@ -27,6 +27,10 @@
 		3DD2ED2D2163CEF400F466D5 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD2ED122163CEF400F466D5 /* SearchBar.swift */; };
 		3DD2ED2E2163CEF400F466D5 /* ChatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD2ED132163CEF400F466D5 /* ChatsView.swift */; };
 		3DD2ED2F2163CEF400F466D5 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD2ED152163CEF400F466D5 /* LoginView.swift */; };
+		3DD2ED312164E3FC00F466D5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DD2ED302164E3FC00F466D5 /* GoogleService-Info.plist */; };
+		3DD2ED322164E48800F466D5 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD2ECFE2163CEF400F466D5 /* OpenSans-Bold.ttf */; };
+		3DD2ED332164E48B00F466D5 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD2ECFF2163CEF400F466D5 /* OpenSans-Regular.ttf */; };
+		3DD2ED342164E4BF00F466D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DD2ECF72163CEF400F466D5 /* Assets.xcassets */; };
 		BFC3F9052C9E97A2362278DD /* Pods_KechingramMessenger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05D53E14E921167706A4CB52 /* Pods_KechingramMessenger.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,7 +46,6 @@
 		3DD2ECF32163CEF400F466D5 /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		3DD2ECF42163CEF400F466D5 /* ThreadSafeArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadSafeArray.swift; sourceTree = "<group>"; };
 		3DD2ECF72163CEF400F466D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3DD2ECF82163CEF400F466D5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3DD2ECFA2163CEF400F466D5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3DD2ECFB2163CEF400F466D5 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3DD2ECFC2163CEF400F466D5 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +63,7 @@
 		3DD2ED122163CEF400F466D5 /* SearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		3DD2ED132163CEF400F466D5 /* ChatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatsView.swift; sourceTree = "<group>"; };
 		3DD2ED152163CEF400F466D5 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		3DD2ED302164E3FC00F466D5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EA72BA30E4F9EC39E663510B /* Pods-KechingramMessenger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KechingramMessenger.release.xcconfig"; path = "Pods/Target Support Files/Pods-KechingramMessenger/Pods-KechingramMessenger.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -161,8 +165,8 @@
 		3DD2ECF62163CEF400F466D5 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				3DD2ED302164E3FC00F466D5 /* GoogleService-Info.plist */,
 				3DD2ECF72163CEF400F466D5 /* Assets.xcassets */,
-				3DD2ECF82163CEF400F466D5 /* GoogleService-Info.plist */,
 				3DD2ECF92163CEF400F466D5 /* LaunchScreen.storyboard */,
 				3DD2ECFB2163CEF400F466D5 /* Extensions.swift */,
 				3DD2ECFC2163CEF400F466D5 /* AppDelegate.swift */,
@@ -348,6 +352,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DD2ED322164E48800F466D5 /* OpenSans-Bold.ttf in Resources */,
+				3DD2ED332164E48B00F466D5 /* OpenSans-Regular.ttf in Resources */,
+				3DD2ED342164E4BF00F466D5 /* Assets.xcassets in Resources */,
+				3DD2ED312164E3FC00F466D5 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

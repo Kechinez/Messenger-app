@@ -39,6 +39,7 @@ class ChatTableViewCell: UITableViewCell {
         
     }()
 
+    //MARK: - init
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.backgroundColor = UIColor.clear
@@ -49,17 +50,14 @@ class ChatTableViewCell: UITableViewCell {
         self.addSubview(timeLabel)
         
         self.setUpConstraints()
-        
         self.setUpImageDrawings()
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-
+    //MARK: - setup image corner radius
     private func setUpImageDrawings() {
         userImage.layer.cornerRadius = 29
         userImage.layer.masksToBounds = false
@@ -68,6 +66,7 @@ class ChatTableViewCell: UITableViewCell {
         userImage.layer.borderWidth = 1
     }
     
+    //MARK: - Updating constraints
     private func setUpConstraints() {
         userImage.widthAnchor.constraint(equalTo: self.heightAnchor, constant: -12).isActive = true
         userImage.heightAnchor.constraint(equalTo: self.heightAnchor, constant: -12).isActive = true
@@ -89,6 +88,5 @@ class ChatTableViewCell: UITableViewCell {
         messageLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
         
     }
-    
 
 }

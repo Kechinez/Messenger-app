@@ -11,7 +11,7 @@ import Foundation
 public typealias JSON = [String: Any]
 
 
-
+//MARK: - JSON parsing protocols
 protocol JsonParsingMessage {
     init?(data: JSON, currentUserID: String)
 }
@@ -24,7 +24,7 @@ protocol JsonParsingUserProfile {
 }
 
 
-
+//MARK: - JSON parsing protocols implementations
 extension Message: JsonParsingMessage {
     init?(data: JSON, currentUserID: String) {
         guard let text = data["text"] as? String,
@@ -43,8 +43,6 @@ extension Message: JsonParsingMessage {
     }
 }
 
-
-
 extension Chat: JsonParsingChat {
     
     init?(data: JSON) {
@@ -56,15 +54,12 @@ extension Chat: JsonParsingChat {
         self.chatID = chatID
         self.timestamp = lastMessageTimestamp.doubleValue
         self.chatOpponentID = nil
-        
     }
 }
-
 
 extension UserProfile: JsonParsingUserProfile {
     
     init?(searchResultSnapshot: Snapshot) {
-        
         guard let firstIterationJsonData = searchResultSnapshot.value as? JSON else { return nil }
         var key = ""
         for k in firstIterationJsonData.keys {
@@ -80,9 +75,7 @@ extension UserProfile: JsonParsingUserProfile {
         self.name = name
         self.userID = key
         self.profileImageURL = profileImageURL
-        
     }
-    
     
     init?(dataSnapshot: Snapshot) {
         guard let jsonData = dataSnapshot.value as? JSON else { return nil }
@@ -95,7 +88,6 @@ extension UserProfile: JsonParsingUserProfile {
         self.name = name
         self.userID = dataSnapshot.key
         self.profileImageURL = profileImageURL
-        
     }
 }
 

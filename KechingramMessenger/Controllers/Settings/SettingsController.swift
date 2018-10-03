@@ -17,35 +17,29 @@ class SettingsController: UIViewController {
     }
     
     
-    
-    
     // MARK: - Controller lifecycle methods
-    
     override func loadView() {
         self.view = SettingsView()
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        settingsView.fillSettingsViewWith(userProfile: currentUserProfile!)
-        settingsView.userProfileImage.setupImageFromCache(using: currentUserProfile!.profileImageURL)
+        guard let userProfile = currentUserProfile else { return }
+        settingsView.fillSettingsViewWith(userProfile: userProfile)
+        settingsView.userProfileImage.setupImageFromCache(using: userProfile.profileImageURL)
         
         guard settingsView.userProfileImage.image == nil,
-              let url = currentUserProfile?.profileImageURL else { return }
+            let url = currentUserProfile?.profileImageURL else { return }
         
-        manager.uploadProfileImage(with: url) { (data) in
+        manager.uploadProfileImage(with: url) { [weak self] (data) in
             guard let image = UIImage(data: data) else { return }
             imageCache.setObject(image, forKey: NSString(string: url))
-            self.settingsView.userProfileImage.image = image
+            self?.settingsView.userProfileImage.image = image
         }
     }
-
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         settingsView.setImageCornerRadius()
     }
-    
 }

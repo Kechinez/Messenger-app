@@ -10,7 +10,7 @@
 import Foundation
 import UIKit
 
-class ThreadSafeArray {
+final class ThreadSafeArray {
     var threadSafeChats: [Chat] = []
     var chatArrayStateDictionary: [String: Int] = [:]
     
@@ -19,15 +19,12 @@ class ThreadSafeArray {
         return (self.chatArrayStateDictionary[chatID] == nil)
     }
     
-    
     func filterChatsArrayInDescendingOrder(updatingStateDictionary: Bool) {
-        
         if self.threadSafeChats.count > 0 {
             self.threadSafeChats.sort(by: { (chat, anotherChat) -> Bool in
                 return chat.timestamp > anotherChat.timestamp
             })
         }
-        
         if updatingStateDictionary {
             for (index, chat) in self.threadSafeChats.enumerated() {
                 guard (self.chatArrayStateDictionary[chat.chatID] != nil) else { continue }
@@ -35,7 +32,6 @@ class ThreadSafeArray {
             }
         }
     }
-    
     
     func append(chat: Chat) {
         self.threadSafeChats.append(chat)

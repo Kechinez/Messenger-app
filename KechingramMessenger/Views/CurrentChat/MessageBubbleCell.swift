@@ -25,7 +25,7 @@ class MesssageBubbleCell: UICollectionViewCell {
         return textView
     }()
     
-    
+    //MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .black
@@ -34,19 +34,20 @@ class MesssageBubbleCell: UICollectionViewCell {
         messageBubbleImage.addSubview(textView)
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     
+    //MARK: - Updating UI
     func setBubbleImage(for messageType: MessageType) {
-        
         if textView.constraints.count > 0 || messageBubbleImage.constraints.count > 0 || self.constraints.count > 0 {
             NSLayoutConstraint.deactivate(textView.constraints)
             NSLayoutConstraint.deactivate(messageBubbleImage.constraints)
             NSLayoutConstraint.deactivate(self.constraints)
         }
-        
         if messageType == .Incoming {
             guard let image = UIImage(named: "bubble_received.png") else { return }
-            
             self.messageBubbleImage.image = image
             messageBubbleImage.tintColor = UIColor.customRed()
             setUpConstraintsForIncomingMessage()
@@ -59,16 +60,9 @@ class MesssageBubbleCell: UICollectionViewCell {
         }
         self.messageBubbleImage.image!.resizableImage(withCapInsets: UIEdgeInsetsMake(17, 25, 17, 25), resizingMode: .stretch)
         self.messageBubbleImage.image!.withRenderingMode(.alwaysTemplate)
-
     }
     
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
+    //MARK: - Updating constraints
     private func setUpConstraintsForIncomingMessage() {
         messageBubbleImage.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.7).isActive = true
         messageBubbleImage.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
@@ -80,7 +74,6 @@ class MesssageBubbleCell: UICollectionViewCell {
         textView.trailingAnchor.constraint(equalTo: messageBubbleImage.trailingAnchor, constant: -15).isActive = true
         textView.bottomAnchor.constraint(equalTo: messageBubbleImage.bottomAnchor, constant: -3).isActive = true
     }
-    
     
     private func setUpConstraintsForOutgoingMessage() {
         messageBubbleImage.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.7).isActive = true
@@ -96,22 +89,5 @@ class MesssageBubbleCell: UICollectionViewCell {
     
     
 }
-
-
-
-extension UIImage {
-    func tint(with color: UIColor) -> UIImage {
-        var image = withRenderingMode(.alwaysTemplate)
-        UIGraphicsBeginImageContextWithOptions(size, false, scale)
-        color.set()
-        
-        image.draw(in: CGRect(origin: .zero, size: size))
-        image = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        return image
-    }
-}
-
-
 
 

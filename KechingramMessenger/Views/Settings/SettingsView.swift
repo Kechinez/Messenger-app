@@ -57,7 +57,7 @@ class SettingsView: UIView {
     }()
     
     
-    
+    //MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(userProfileImage)
@@ -69,19 +69,11 @@ class SettingsView: UIView {
         setUpConstraint()
     }
     
-    
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    func setImageCornerRadius() {
-        let r = userProfileImage.bounds.height / 2
-        userProfileImage.layer.cornerRadius = r
-    }
-    
-    
+    //MARK: Updating UI
     func fillSettingsViewWith(userProfile: UserProfile) {
         if let url = userProfile.profileImageURL {
             if let image = imageCache.object(forKey: NSString(string: url))  as? UIImage {
@@ -92,7 +84,12 @@ class SettingsView: UIView {
         textEmailLabel.text = userProfile.email
     }
     
+    func setImageCornerRadius() {
+        let r = userProfileImage.bounds.height / 2
+        userProfileImage.layer.cornerRadius = r
+    }
     
+    //MARK: - Updating constraints
     private func setUpConstraint() {
         userProfileImage.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.35).isActive = true
         userProfileImage.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
